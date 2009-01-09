@@ -3,7 +3,7 @@
 # 
 # Example:
 # 
-# # Here's a Sandwich class, with a bunch of silly methods.
+# # Here's a Sammich class, with a bunch of silly methods.
 # 
 # class Sammich
 #   private_class_method
@@ -22,7 +22,7 @@
 #   
 # describe "Sammich"
 #   before(:each) do
-#     expose_privates Sandwich, :slice_bread, :shuffle_condiments
+#     expose_privates Sammich, :slice_bread, :shuffle_condiments
 #     expose_class_privates :make_tupperware
 #   end
 #   
