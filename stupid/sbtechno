@@ -1,0 +1,6 @@
+#!/bin/sh
+# 
+# http://twitter.com/chalain/statuses/1142618553
+
+say -v Agnes 'do do,do do do.'{,,} & say -v Alex "douche,"{,,,,,,,}  & say -v Bruce "The system, Is down."{,,}
+
