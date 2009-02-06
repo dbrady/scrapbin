@@ -1,0 +1,24 @@
+ActsAsPartialFinder
+===================
+
+# Usage:
+# 
+# class Foo < ActiveRecord::Base
+#   acts_as_partial_finder :username
+#   acts_as_partial_finder :name, :fields => [:last_name, :first_name, :username]
+# end
+# 
+# The first statement creates a class method,
+# Foo.find_by_partial_username(str)
+# that searches the foos table for username like %str%.
+# 
+# The second statement creates a class method,
+# Foo.find_by_partial_name(str),
+# that searches the foos table for records with last_name, first_name, OR
+# username like %str%.
+# 
+# NOTE: It's compatible with other find* arguments. The following queries do
+# what you'd expect:
+#  
+# User.find_by_partial_username('br', :conditions => 'id<20')
+# User.find_by_partial_name('smith', :limit=>10, :order=>'first_name desc')
