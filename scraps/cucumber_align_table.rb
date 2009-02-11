@@ -3,7 +3,7 @@ cols = []
 lead = nil
 line_fields = []
 ARGF.each_line do |line|
-  lead ||=  line.length - line.lstrip.length
+  lead ||=  line[0..(line.length - line.lstrip.length - 1)]
   fields = line.split(/\|/).map { |f| f.strip}
   fields.pop; fields.shift
   line_fields << fields
@@ -13,7 +13,7 @@ ARGF.each_line do |line|
 end
 
 
-format = "#{' '*lead}| #{cols.map {|l| "%%-%ds" % l} * ' | '} |"
+format = "#{lead}| #{cols.map {|l| "%%-%ds" % l} * ' | '} |"
 
 # puts format
 line_fields.each do |fields|
