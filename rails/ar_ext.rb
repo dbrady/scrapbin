@@ -1,6 +1,6 @@
 class ActiveRecord::Base
   #  This is MySQL-specific. Sorry about that. TODO: Refactor me to use the information schema!
-  def self.describe(sorted=false)
+  def self.describe_table(sorted=false)
     puts '--'
     rows = connection.select_all("DESCRIBE #{table_name}")
     rows = rows.sort_by {|r| r["Field"]} if sorted
