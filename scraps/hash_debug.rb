@@ -22,7 +22,7 @@ unless Hash.private_instance_methods.include?("assignment_breakpoints")
     def set_breakpoint_on_assignment(key)
       assignment_breakpoints[key] = true
     end
-    alias :break_on_assignment :set_breakpoint_on_assignmeant
+    alias :break_on_assignment :set_breakpoint_on_assignment
     
     def clear_breakpoint_on_assignment(key)
       assignment_breakpoints.delete(key)
