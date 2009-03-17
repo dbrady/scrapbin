@@ -9,21 +9,22 @@ require 'ruby-debug'
 # 
 #  @search = { }
 # 
-#  @search.set_breakpoint_on_assign :education_level_id
+#  @search.set_breakpoint_on_assignment :education_level_id
 #  @search[:foo] = "bar"
 #  @search[:education_level_id] = "2"  # triggers debugger
-#  @search.clear_breakpoint_on_assign :education_level_id
+#  @search.clear_breakpoint_on_assignment :education_level_id
 #  @search[:education_level_id] = "3"  # doesn't trigger
 #  @search[:bar] = "baz"
 unless Hash.private_instance_methods.include?("assignment_breakpoints")
   class Hash
     alias :orig_set :[]=
       
-    def set_breakpoint_on_assign(key)
+    def set_breakpoint_on_assignment(key)
       assignment_breakpoints[key] = true
     end
+    alias :break_on_assignment :set_breakpoint_on_assignmeant
     
-    def clear_breakpoint_on_assign(key)
+    def clear_breakpoint_on_assignment(key)
       assignment_breakpoints.delete(key)
     end
     
