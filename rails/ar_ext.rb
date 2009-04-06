@@ -1,21 +1,15 @@
+require 'ruport'
+
 class ActiveRecord::Base
   #  This is MySQL-specific. Sorry about that. TODO: Refactor me to use the information schema!
   def self.describe_table(sorted=false)
-    puts '--'
+    table = Ruport::Data::Table(%w[Field Type Null Key Default Extra])
     rows = connection.select_all("DESCRIBE #{table_name}")
     rows = rows.sort_by {|r| r["Field"]} if sorted
-    longest = Hash.new(0)
-    keys = ["Field", "Type", "Null", "Key", "Default", "Extra"]
-    keys.each { |k| longest[k] = k.size }
-    rows.each { |r| keys.each { |k| s = (r[k] ? r[k].size : 0); longest[k] = s if s > longest[k]}}
-    puts longest.inspect
-    w = (keys.map { |k| "%-#{longest[k]}s" % k } * ' | ').size
-    puts '-' * w
-    puts "Table: #{table_name}"
-    puts keys.map { |k| "%-#{longest[k]}s" % k } * ' | '
-    puts '-' * w
-    puts rows.map { |r| keys.map {|k| "%-#{longest[k]}s" % r[k]} * ' | '}
-    puts '-' * w
+    rows.each do |row|
+      table << row
+    end
+    puts table
   end
 
   # Returns an array of distinct values from a column
@@ -30,13 +24,10 @@ class ActiveRecord::Base
 
   # Draw the reflections/associations from this class.
   def self.draw_reflections
-    longest_macro = self.reflect_on_all_associations.map { |mr| mr.macro.to_s.length }.max
-    longest_name = self.reflect_on_all_associations.map {|mr| mr.name.to_s.length }.max
-    puts "#{self.class_name}"
-    puts "-" * (longest_macro + longest_name + 2)
-    self.reflect_on_all_associations.sort {|a,b| a.macro.to_s+" "+a.name.to_s <=> b.macro.to_s+" "+b.name.to_s }.each do |mr|
-      puts "#{mr.macro.to_s.ljust(longest_macro, ' ')}  #{mr.name}"
+    table = Ruport::Data::Table(["Relation", "Class"])
+    self.reflect_on_all_associations.sort_by { |a| "%-100s%-100s" % [a.macro, a.name]}.each do |mr|
+      table << { "Relation" => mr.macro.to_s, "Class" => mr.name.to_s }
     end
-    nil
+    puts table
   end
 end
