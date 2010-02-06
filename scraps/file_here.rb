@@ -1,9 +1,11 @@
-# Thanks to Giles Bowkett for the original idea: http://gilesbowkett.blogspot.com/2009/04/unshiftfiledirnamefile.html
 class File
-  # Returns the fully expanded joined path relative to the calling file's path.
-  # E.g. If your code file is in ~bob/project/code/foo.rb, and you call File.here(%w{.. test foo_test})
-  # it will return "/home/bob/project/test/foo_test"
-  def self.here(*paths)
-    expand_path(join(dirname(__FILE__), paths))
+  # Hides all that lovely expand/join/dirname(__FILE__, path) crap
+  # 
+  # E.g.: require File.here("../lib/pants")
+  # 
+  # Splatty version for the OS Agnosts out there:
+  # require File.here(%w[.. lib pants])
+  def self.here(*args)
+    p = File.expand_path(File.join(Dir.pwd, File.dirname(caller.first.split(':')[0]), *args))
   end
 end
