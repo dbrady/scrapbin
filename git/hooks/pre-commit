@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+# git-hook to check for NOCOMMIT messages in code that has been staged
+# and abort the commit if found.
+# 
+# TODO: Figure out how to include file/line number in error message
+`git diff-index -p -M --cached HEAD`.each_line do |line|
+  if line =~ /^\+.*NOCOMMIT/
+    4.times { puts "*" * 80 }
+    puts 
+    puts "COMMIT ABORTED: You are staging a file with NOCOMMIT!"
+    puts
+    puts line
+    exit 1
+  end
+end
+
+exit 0
