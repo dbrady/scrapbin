@@ -2,7 +2,7 @@ require 'ruport'
 
 class ActiveRecord::Base
   #  This is MySQL-specific. Sorry about that. TODO: Refactor me to use the information schema!
-  def self.describe_table(sorted=false)
+  def self.desc(sorted=false)
     table = Ruport::Data::Table(%w[Field Type Null Key Default Extra])
     rows = connection.select_all("DESCRIBE #{table_name}")
     rows = rows.sort_by {|r| r["Field"]} if sorted
@@ -10,6 +10,10 @@ class ActiveRecord::Base
       table << row
     end
     puts table
+  end
+
+  def self.describe_table(sorted=false)
+    desc(sorted)
   end
 
   # Returns an array of distinct values from a column
@@ -31,3 +35,9 @@ class ActiveRecord::Base
     puts table
   end
 end
+
+def desc(klass, sorted=false)
+  klass.desc sorted
+end
+
+alias describe_table desc
