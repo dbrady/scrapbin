@@ -1,16 +1,16 @@
-# abbreviatize - Take a class and create aliases for all of its
+# rogerify - Take a class and create aliases for all of its
 # methods that are acronyms of the original methods.
-# 
+#
 # NOTES:
 #
 # * If abbreviations collide, the first abbreviation is left alone and
 #   subesquent abbreviations have a decimal suffix appended, starting
 #   at 2, e.g. "fb", "fb2", "fb3".
-# 
+#
 # * If an alias collides with an existing method name, the original
 #   method is renamed, with "_orig" appended to it. This is to make
 #   sure that every new acronym is valid and where you expect it.
-# 
+#
 class String
   # given a method name (string), returns it abbreviated Roger-style
   # e.g. "this_is_a_string" -> "tias", "what_is_that?" -> "wit?"
@@ -21,7 +21,7 @@ class String
   # Add lowest decimal number to this string to make it not be
   # included in ray. Skips 0 and 1, so first decimal suffix is
   # 2. Returns base with no suffix if !ray.include?(base)
-  def abbreviatize_suffix(ray)
+  def rogerify_suffix(ray)
     i=1
     base = str = self
     while ray.include? str
@@ -30,14 +30,14 @@ class String
     str
   end
 
-  def abbreviatize_suffix!(ray)
-    self.replace abbreviatize_suffix(ray)
+  def rogerify_suffix!(ray)
+    self.replace rogerify_suffix(ray)
   end
 end
 
 
 class Object
-  def self.abbreviatize!
+  def self.rogerify!
     sm = self.singleton_methods.sort
     replace_class_method = lambda do |newmethod, oldmethod|
       newmethod = newmethod.gsub(/\?/,'') + "?" if newmethod =~ /\?.+$/
@@ -50,7 +50,7 @@ class Object
       old_method = method
       new_method = method.rogerify
       next if old_method == new_method
-      new_method.abbreviatize_suffix!(self.singleton_methods - sm)
+      new_method.rogerify_suffix!(self.singleton_methods - sm)
       replace_class_method.call(new_method, old_method)
     end
 
@@ -66,12 +66,12 @@ class Object
       old_method = method
       new_method = method.rogerify
       next if new_method == old_method
-      new_method.abbreviatize_suffix!(self.instance_methods - im)
-      replace_method.call(new_method, old_method)    
+      new_method.rogerify_suffix!(self.instance_methods - im)
+      replace_method.call(new_method, old_method)
     end
   end
 end
-  
+
 class Foo
   def foo_bar_baz
     42
@@ -111,8 +111,8 @@ end
 
 
 if __FILE__ == $0
-  Foo.abbreviatize!
-  Foo.abbreviatize!
+  Foo.rogerify!
+  Foo.rogerify!
   puts "-" * 80
   puts "Foo.bar_foo_baz? #{Foo.bar_foo_baz?}"
   puts "f.baz_bar_foo! #{Foo.new.baz_bar_foo!}"
