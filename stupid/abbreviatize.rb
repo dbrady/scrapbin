@@ -1,6 +1,10 @@
 # rogerify - Take a class and create aliases for all of its
 # methods that are acronyms of the original methods.
 #
+# GOOD HEAVENS, PEOPLE, THIS IS PRANK CODE - DO NOT EVER USE THIS!
+# "roger" is used here in the slang sense meaning a very personal
+# bodily violation...
+#
 # NOTES:
 #
 # * If abbreviations collide, the first abbreviation is left alone and
