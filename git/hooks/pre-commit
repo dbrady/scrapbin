@@ -3,6 +3,13 @@
 # git-hook to check for NOCOMMIT messages in code that has been staged
 # and abort the commit if found.
 # 
+# To use: copy this file into your .git/hooks folder as pre-commit and
+# make sure it is executable (chmod +x pre-commit). Now in your code,
+# type // NOCOMMIT or # NOCOMMIT in a line and save it -- usually with
+# an explanatory message like "# NOCOMMIT -- temp hack for bug #123".
+# Git will still let you stage the file with git add, but it will stop
+# you from committing the file until you remove the NOCOMMIT comment.
+# 
 # TODO: Figure out how to include file/line number in error message
 `git diff-index -p -M --cached HEAD`.each_line do |line|
   if line =~ /^\+.*NOCOMMIT/
