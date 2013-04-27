@@ -21,33 +21,33 @@
 # Library.
 module ScopedAttrAccessor
   def private_attr_reader(*names)
-    private
-    attr_reader *names
+    attr_reader(*names)
+    names.each {|name| private name}
   end
 
   def private_attr_writer(*names)
-    private
-    attr_writer *names
+    attr_writer(*names)
+    names.each {|name| private "#{name}=" }
   end
 
   def private_attr_accessor(*names)
-    private
-    attr_accessor *names
+    attr_accessor(*names)
+    names.each {|name| private name; private "#{name}=" }
   end
 
   def protected_attr_reader(*names)
     protected
-    attr_reader *names
+    attr_reader(*names)
   end
 
   def protected_attr_writer(*names)
     protected
-    attr_writer *names
+    attr_writer(*names)
   end
 
   def protected_attr_accessor(*names)
     protected
-    attr_accessor *names
+    attr_accessor(*names)
   end
 end
 
@@ -208,34 +208,14 @@ if __FILE__==$0
       @foo.peek_at_priv_read3.must_equal "priv_read3"
     end
 
-    def test_private_writers_do_in_fact_exist
-      @foo.peek_at_priv_write1.must_equal "priv_write1"
-      @foo.peek_at_priv_write2.must_equal "priv_write2"
-    end
-
-    def test_private_accessors_do_in_fact_exist
-      @foo.peek_at_priv_access1.must_equal "priv_access1"
-      @foo.peek_at_priv_access2.must_equal "priv_access2"
-    end
-
-    def test_private_writers_are_in_fact_private
-      lambda { @foo.priv_write1 = "OH NOES" }.must_raise NoMethodError
-      lambda { @foo.priv_write2 = "OH NOES" }.must_raise NoMethodError
-    end
-
-    def test_private_accessors_are_in_fact_private
-      lambda { @foo.priv_access1 = "OH NOES" }.must_raise NoMethodError
-      lambda { @foo.priv_access2 = "OH NOES" }.must_raise NoMethodError
-    end
-
-    def test_private_writers_do_in_fact_exist
+    def test_private_writers_do_in_fact_work_as_writers
       @foo.poke_at_priv_write1 "OOH NEAT1"
       @foo.poke_at_priv_write2 "OOH NEAT2"
       @foo.peek_at_priv_write1.must_equal "OOH NEAT1"
       @foo.peek_at_priv_write2.must_equal "OOH NEAT2"
     end
 
-    def test_private_accessors_do_in_fact_exist
+    def test_private_accessors_do_in_fact_work_as_accessors
       @foo.poke_at_priv_access1 "OOH WOW1"
       @foo.poke_at_priv_access2 "OOH WOW2"
       @foo.peek_at_priv_access1.must_equal "OOH WOW1"
@@ -286,14 +266,14 @@ if __FILE__==$0
       lambda { @bar.prot_access2 = "OH NOES" }.must_raise NoMethodError
     end
 
-    def test_protected_writers_do_in_fact_exist
+    def test_protected_writers_do_in_fact_work_as_writers
       @bar.poke_at_prot_write1 "AWW YEAH1"
       @bar.poke_at_prot_write2 "AWW YEAH2"
       @bar.peek_at_prot_write1.must_equal "AWW YEAH1"
       @bar.peek_at_prot_write2.must_equal "AWW YEAH2"
     end
 
-    def test_protected_accessors_do_in_fact_exist
+    def test_protected_accessors_do_in_fact_work_as_accessors
       @bar.poke_at_prot_access1 "OH SNAP1"
       @bar.poke_at_prot_access2 "OH SNAP2"
       @bar.peek_at_prot_access1.must_equal "OH SNAP1"
