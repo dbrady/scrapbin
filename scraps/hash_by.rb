@@ -16,7 +16,6 @@ if $0==__FILE__
 
   class TestHashBy < MiniTest::Unit::TestCase
     def test_block_version
-      # test block version
       (1..10).to_a.hash_by {|x| x % 3 }.must_equal( {0=>[3,6,9], 1=>[1,4,7,10], 2=>[2,5,8]} )
     end
 
