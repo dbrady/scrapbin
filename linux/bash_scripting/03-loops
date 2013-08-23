@@ -1,0 +1,115 @@
+#!/bin/bash
+./01-setup-scratch
+
+# Loops! This is where bash starts to get freak-AYYY. But in a good
+# way.
+
+# So let's say that you want all those xml files to be prefixed with,
+# I dunno, "qa-", so wilma.xml -> "qa-wilma.xml", etc. This is the ONE
+# time when DOS actually beats bash; it's smart enough to take 2
+# patterns on the command like, like RENAME *.xml qa-*.xml
+
+# But this isn't DOS. We need to take each filename and transform it
+# individually. Fortunately, this isn't DOS, and we can actually DO
+# that.
+
+(
+  cd scratch && # ignore this line
+  for file in *.xml; do mv $file qa-$file; done
+)
+
+# I did this in a subshell because I wanted to cd into the scratch
+# folder first. Usually I write for loops directly at the bash prompt
+# so I'm already IN the folder I want to be in. But sometimes you're
+# not in the folder you want to be in... now what? Well, that's where
+# loops and subshells come together quite nicely. Let's use a subshell
+# to call basename, which we saw in the 02 script. It can be used to
+# strip off the directory and a suffix, or just the directory. (Type
+# 'man basename' to see what basename can do for you.)
+./01-setup-scratch
+for file in scratch/*.xml; do mv $file scratch/qa-$(basename $file); done
+
+# For loops all have the same structure:
+#
+# for variable in <list_of_words>
+# do
+#     <sequence_of_shell_commands_using> $variable
+# end
+
+# Now for loops don't just work on *.xml file lists. They actually
+# work on INDIVIDUAL WORDS. For example, here's how to count to 6 with
+# a for loop:
+
+for word in one two three four five six; do echo Counting $word...; done
+
+# But wait. This could actually be a problem. What if...
+./01-setup-scratch
+mv scratch/bambam.xml "scratch/bam bam.xml"
+
+# Uh-oh. We have a file with a space in it, which means we have a problem:
+echo Here is what happens when we iterate over a list of files with
+echo spaces in them:
+for file in scratch/*.xml; do echo $file; done
+
+# Aaaand on this version of linux it actually works. Crud. On FreeBSD
+# (which means "OSX" for you macheads out there) that would have
+# output:
+#
+# scratch/bam
+# bam.xml
+# scratch/barney.xml
+# scratch/betty.xml
+# ...etc.
+
+# Maybe there's another way to demonstrate this.
+echo File processing...
+ls scratch/*.xml > scratch/list_of_files.txt
+for file in $(cat scratch/list_of_files.txt); do echo $file; done
+
+# THERE we go. See the output?
+# File processing...
+# scratch/bam
+# bam.xml
+# scratch/barney.xml
+# scratch/betty.xml
+# scratch/dino.xml
+
+# So we think of the for loop as processing a list of items, but in
+# reality it processes a list of WORDS. How do we process a list of
+# LINES? Enter the while loop.
+
+echo File processing with a while loop:
+cat scratch/list_of_files.txt | while read file; do echo $file; done
+
+# And now we get our expected output:
+#
+# File processing with a while loop:
+# scratch/bam bam.xml
+# scratch/barney.xml
+
+# while loops have a much different syntax. For starters, you can't
+# give them a list of things. You PIPE in a STREAM of things. Instead
+# of "for x in ...; do" it's "./some_program | while read x; do ..." I
+# don't know why the syntaxes are wildly different but--
+
+# Wait, yes I do. See, while IS actually the same syntax as for:
+#
+# while <condition>; do ... end
+#
+# It's the READ command in there that chunks things up into
+# lines. read() will read input from the console (or a pipe) until it
+# hits a line break, and then the whole chunk of "stuff read" gets put
+# into the variable. So, there you go. While loops.
+
+# Incidentally, if you need a program to loop forever, you would want
+# a while loop. Check it:
+
+# while /bin/true; do echo "TICK!"; sleep 1; done
+
+# This script is actually not that interesting, but you get the
+# idea. /bin/true is a linux program that always returns a succesful
+# exit status (satisfying the condition part of "while
+# <condition>"). It is commonly used with sleep <timeframe> to make a
+# watchdog program, uh, watch.
+
+# Clear as mud? Let's start doing something USEFUL with all this stuff.

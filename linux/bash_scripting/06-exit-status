@@ -1,0 +1,84 @@
+#!/bin/bash
+./01-setup-scratch
+
+# Let's talk for just a moment about exit statuses in linux. You
+# remember all those programs you used to write that had a main()
+# method? Remember how those always returned an int? And you ignored
+# it, or used the alternate version that your compiler allowed that
+# returned void? That's because you've been on Windows for far too
+# long. Let's talk about exit codes.
+
+# return 0 if your program exited cleanly. (You can actually do this
+# in ruby! "exit 0" will immediately exit your script and return a 0
+# to the operating system.
+
+# return ANY OTHER NUMBER if your program exited with an error.
+
+# A lot of folks like to use positive numbers for warnings and
+# negative numbers for errors. Whatever. Just return 0 if you want
+# people to be able to use your program to detect problems in their
+# scripts.
+
+# Here's a simple example:
+ls scratch/wilma.xml && echo 'Success! I found the wilma file.'
+
+ls scratch/bougainvillea.xml || echo 'Failure! I could not find the bougainvillea file (this is because that file does not exist, so we are okay.'
+
+# So right off you can see that bash honors C-style
+# "short-circuiting". If a program returns success, the && will then
+# run the next script in the sequence. If it fails, bash
+# short-circuits and stops running scripts in the line.
+
+# /bin/false && rm -rf /  # seriously, not even as a joke. But you get
+# what I mean. This would not actually erase your hard drive.
+
+# Conversely || does the opposite--only continues if the previous
+# script failed.
+
+# So, in the immortal words of Ruby Rhod, "BUT WHO CARES?!?"
+
+# You do, because you can now build entire setup scripts with
+# step-by-step checks like so:
+
+# setup_first_step &&
+#   do_second_step &&
+#   do_third_step &&
+#   etc...
+
+# And the script will stop at the first step that fails. Neat, huh?
+
+# We'll start using these exit codes more in upcoming installments,
+# but we've already used them! Yes we have. Remember the while loop
+# back in chapter 2? The while <condition> is actually a PROGRAM that
+# while executes, and examines the exit status to see if it should
+# continue. Yes really. /bin/true is actually a C program. Look it up
+# if you don't believe me, your operating system is open source. Here
+# is the entire C source code of the "true" program:
+
+# int main(char *argv[], char **env) {
+#   return 0;
+# }
+
+# BAM.
+
+# Similarly, when we wrote "while read f", bash did some magic to
+# store the stream input in f, but guess what read returns if it
+# successfully gets a line from the keyboard or from the input stream?
+# Now, for bonus points: guess what it returns when it hits EOF?
+
+# (I don't know the exact number. You'd have to look it up in the
+# source code. But what we DO know is that it's not zero.)
+
+# Exit statuses. They ROCK.
+exit 0 # ;-)
+
+
+# ruby, bash, sh, python, perl, and heck, even php, all return 0
+# automatically if they get to the end of a script peacefully. They
+# also all automatically return nonzero if your script gets terminated
+# by an unhandled exception. Beyond that, however, it's up to
+# you. This bash script has already terminated, but we could
+# explicitly choose an exit status response based on what shenanigans
+# went on during processing.
+
+# DAVE: TODO: 07-control-flow is probably a good next chapter.

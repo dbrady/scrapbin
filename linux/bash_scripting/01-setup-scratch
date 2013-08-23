@@ -1,0 +1,15 @@
+#!/bin/sh
+# This is a common "sh" script. sh is the precursor to bash and
+# doesn't have many bells and whistles. It supports ENV vars, for
+# example, but not file tests and for loops. Nowadays the speed and
+# memory differency between sh and bash is negligible, so my general
+# advice is don't use sh unless you have a reason to. You get more
+# with bash and usually can't tell that you're paying for it.
+
+# So let's do something mind-numbingly (read: sh-grokkable) simple
+
+# clear out the scratch workspace
+rm -rf scratch/*
+
+# copy in template files
+cp sample-data/* scratch/

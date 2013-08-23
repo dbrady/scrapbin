@@ -1,0 +1,81 @@
+#!/bin/bash
+
+./01-setup-scratch
+
+
+# This is a full-fledged bash script, and thus lets us do all the cool
+# things we couldn't do with just sh. Let's start with subshells.
+
+# Subshells are usually more useful typed directly at a bash prompt
+# than in a script, but they work the same way. A subshell invokes a
+# separate copy of bash, runs that command, and returns the
+# result. There are two ways to run them:
+
+# With backticks:
+echo Subshell with backticks:
+echo `ls scratch`
+
+# This runs 'ls scratch', gets the output of the command, and returns
+# it as a string. The above echo will work. It's rare to see this form
+# anymore, and I'm not sure why. Go read the man page on bash
+# sometime.
+
+# The other way is using $(...) syntax:
+
+echo Subshell with dollar-parens:
+echo $(ls scratch)
+
+# This is the more common way of doing it. The main difference I see
+# between these two is that the backtick syntax looks like a giant
+# string to emacs and gets syntax highlighted as such, which can make
+# long subshells hard to debug, while the $(...) syntax looks like
+# bash code.
+
+# So... what good is this? I use subshells a number of different ways
+# but the two most common are
+
+# 1. When I don't want to retype (or remember) the whole thing I just
+# wrote, for example:
+
+# $ which gem
+# => /home/chris.meadows/.rvm/rubies/ruby-1.9.3-p194/bin/gem
+#
+# Now I know "gem" is a ruby script, and I want to cat it, but I don't
+# want to type in that big long path. And why should I? Bash knows
+# where the stupid file is:
+
+# $ cat $(which gem)
+#
+# Bam.
+
+# And 2. when I want to transform the output of a command into
+# different input to be given to another command. Bleh-wait, what? I
+# mean like this:
+
+# Say you want a list of all the xml files in the scratch directory
+# BUT WITHOUT the .xml suffix. Why do you want that? I don't know,
+# you're the one who wants it. Shut up. Plus this is a really stupid
+# example, but that's because it's the core of a loop--it'll get a LOT
+# more useful when we put the loop back around it.
+echo Transforming I/O with a subshell
+echo The $(ls scratch/wilma.xml) file has a basename of $(basename scratch/wilma.xml .xml)
+
+# Again, that looks a bit silly because I'm hardcoding the patch to
+# scratch/wilma.xml, but if it was in a loop... well, I'm getting
+# ahead of myself. Look at the next file, 03-loops.
+
+# Ah. I just remembered the difference between backticks and
+# parens. Inside a script, you can use parens (without a $) to invoke
+# a subshell that will let you change environment and directories and
+# such, and then when it exits it throws away those changes. So for
+# example say you wanted to list all of the files in both scratch AND
+# sample-data but you don't want the prefix on there. You can't use
+# basename now (well, you could work around it, but shut up) because
+# the prefix changes. But you can use a subshell to cd down in there.
+
+echo "Here's the guts of scratch and sample-data"
+(cd scratch && ls *.xml)
+(cd sample-data && ls *.xml)
+
+# The important thing to note here is that after the ), the cd goes
+# away and we are back in the bash-scripting folder.

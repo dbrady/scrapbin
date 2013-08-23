@@ -1,0 +1,137 @@
+#!/bin/bash
+
+# inplace replacement requires a full-powered scripting language:
+# perl, python or ruby. And the real heresy today is this: I much
+# prefer perl. Python makes this somewhat unpleasant so we'll skip
+# that language entirely. But let's start with Ruby because it makes
+# things a bit more clear, then we'll move on to perl which makes
+# things much more concise.
+
+./01-setup-scratch
+
+# Let's do that same inplace replacement as chapter 4.
+for file in scratch/*.xml; do ruby -i -n -e 'puts $_.gsub /Flintstones/, "Old-Timey Cavepeople"' $file; done
+
+# If you bust out the Pickaxe book, one page well-worth studying is
+# the chapter on Command-Line Arguments (Chapter 15.1 in the 4th
+# Edition of Programming Ruby covers this chapter). Let's start with
+# -e because IT FREAKING ROCKS.
+
+# -e is "execute this block of code". For example:
+ruby -e 'puts "Use the -e operator to (e)xecute a command"; ray = %w(or a sequence of commands); ray.each {|word| puts word }'
+
+# I use this ALL the time when I need a calculator:
+ruby -e 'puts 42*2+3**9'
+# => 19767
+
+
+# Okay, so what's this -n and -i stuff? Well, -n is a bit more
+# complicated. It means "loop over some file, line by line (hey! that
+# sounds like sed!), and do something with each line."
+
+# That something is "put the line in a variable called $_ and then run
+# your program on it." What program? Well, you could actually write a
+# 50-line script, but don't do that. -n was MADE to go with -e. Check
+# it out:
+
+echo "Here's ruby running over wilma.xml, uppercasing all of the xml tags:"
+ruby -i -n -e 'puts $_.gsub(/<(.*?)>/) {|match| "#{match.upcase}" }' scratch/wilma.xml
+cat scratch/wilma.xml
+
+./01-setup-scratch
+
+# But if we cat the wilma.xml file, it is unchanged. Just like sed, it
+# cannot do an in-place edit.
+
+# ...unless... hey. Any guesses what the -i argument does? ;-)
+
+# (If you guessid "in-place ed(i)t" then, uh, fine.)
+echo Running ruby with in-place editing turned on...
+ruby -i -n -e 'puts $_.gsub(/<(.*?)>/) {|match| "#{match.upcase}" }' scratch/wilma.xml
+echo And here is wilma now:
+cat scratch/wilma.xml
+
+
+# Of interesting note: if you look closely at the -n argument, it
+# stands for "non-printing loop" it will loop over the file, and yield
+# each line into $_, but NOT print out the original line--only the
+# output of your script.
+
+# There is also a -p argument, which stands for (waaaaiiit for iiiit),
+# a "p)rinting loop". This version prints out each line of the file,
+# THEN the output of each line of your script. I don't use this
+# version nearly as much, but it has its uses--especially if you're
+# using a script to inject new text into a file. Try coping and
+# pasting the ruby command above into bash, but change the -n to
+# -p. Run it and you'll see the output comes back as
+
+# <person>
+# <PERSON>
+#     <first_name>Wilma</first_name>
+#     <FIRST_NAME>Wilma</FIRST_NAME>
+# ...etc.
+
+
+# Okay, so... why perl? Well... that's a good question. And I'll say
+# up front that perl may not be the best go-to language here for
+# everybody. I like perl here for three reasons:
+
+# 1. It uses exactly the same command-line arguments for in-place
+# editing as ruby. Even the -p and -n are the same. In fact, perl is
+# where Matz got the idea for these switches. (Actually, it's where
+# EVERYBODY who has written a post-perl scripting language got the
+# idea. Python does this, as do a number of other CLI scripting
+# languages. Except for php. Seriously, screw php, guys. BUT I
+# DIGRESS.)
+
+# 2. perl is a stream-oriented language, which makes perl MUCH more
+# succinct than ruby for this type of work. We'll do another replace
+# in just a minute and you'll see what I mean.
+
+# 3. I already know perl. This is where perl may fall down for
+# you. For simple replacements, sure, just learn the syntax of the
+# s/// command (hint: it's the same as sed, which is why a lot of
+# non-ruby folks like it). If I need to get a little bit more
+# crazy--but only a LITTLE bit--I can stay in perl. But honestly I use
+# ruby if I need to do anything special. Even for just the .upcase()
+# call up above I prefer to switch to ruby, so YMMV.
+
+# perl is famous for being a "write-only" language. It is very cryptic
+# and makes a LOT of assumptions--and the perl culture is such that
+# the writer can and does expect the reader to know and understand
+# those assumptions. If you don't, or until you do, perl can be a
+# nightmare. But once you do, it's really quite elegant. Let's say
+# we've namespaced our xml, so we need to tag everything in brackets
+# with the spa namespace. E.g.
+
+# <spa:person>
+#     <spa:first_name>Wilma</spa:first_name>
+
+# Yuck, right? Not with perl. Check it out:
+./01-setup-scratch
+for file in scratch/*.xml; do perl -i -p -e 's/<(\/?)(.+?)>/<$1spa:$2>/g' $file; done
+
+# The main difference between perl and ruby is that in perl, you can
+# modify the line of text in-place, so -p actually makes a LOT more
+# sense in perl. You say "grab a line, modify it, and print the
+# output". Perl is a very stream-based language, much like sed. You
+# should read up on regular expressions if the gibberish in there
+# makes no sense. This stream orientation is what makes perl a better
+# tool for this job: Like ruby, perl ALSO loops over the data file and
+# sticks the current line into $_. But unlike ruby's String#gsub
+# method, the s/// gsub does not need an object to operate on. It
+# assumes you meant $_. And it also doesn't need a print (puts)
+# statement, because perl -p assumes you meant "print the output of
+# whatever expression I write". We COULD have written "$_ = $_ =~
+# s/.../" which would have set explicit input and output variables,
+# but this would actually be considered very bad form in perl.
+
+# And that's enough about perl.
+
+# The important thing here is that in ruby we can do
+
+# ruby -i -n -e 'puts $_.do_something'
+
+# and with perl we can do
+
+# perl -i -p -e 's/match/replace/g'

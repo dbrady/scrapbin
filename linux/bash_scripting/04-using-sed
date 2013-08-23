@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Okay, time for things to get interesting. Half of bash is knowing
+# the glue constructs like while and for and the various boolean
+# operators, and the other half is knowing what programs nad builtins
+# are available to you. (A "builtin" is a command that bash knows how
+# to interpret directly, such as cd or ls, whithout having to invoke a
+# separate program. Type 'man builtins' for more info.)
+
+# But for now, let's touch half of the most important pair of commands
+# you'll ever play with in bash: sed.
+
+# (The other half is awk, and I'm not even going to touch on
+# awk. Suffice to say that sed and awk are the subject of entire
+# books. No, literally. I'm serious:
+# http://www.amazon.com/sed-awk-Edition-Dale-Dougherty/dp/B00007FYIJ/ref=sr_1_2?ie=UTF8&qid=1360012479&sr=8-2&keywords=sed+and+awk
+# )
+
+# Well, I'll sum up awk: it reads text and reformats it for
+# reports. It is VERY smart and has its own programming language. It's
+# cool. You should learn it.
+
+# But sed... sed is, well, a simpler version of awk. (See? If you had
+# learned awk by now that sentence would have been a lot more useful
+# to you.) sed is short for "stream editor", and it manipulates single
+# lines of text. Think "find and replace" but on a line-by-line basis.
+
+# Let's say that you bought the rights to the Flintstones characters,
+# and you're renaming the show to Old-Timey Cavepeople. Why would you
+# do this? I don't even know. But I'm not here to question your
+# motives.
+
+./01-setup-scratch
+
+echo Using sed to transform files
+for file in scratch/*.xml; do cat $file | sed -e 's/Flintstones/Old-Timey Cavepeople/g'; done
+
+# Output:
+# <person>
+#   <first_name>Bam Bam</first_name>
+#   <last_name>Flintstone</last_name>
+#   <show>Old-Timey Cavepeople</show>
+# </person>
+
+# Seems legit. Except if you cat the files in scratch, they are
+# unchanged. That's because sed just alters streams. We catted the
+# files, then piped them through sed, but then where did they go? Just
+# like cat spits things out to stdout unless redirected, sed does the
+# same thing. We saw all that output go by because that's where we
+# sent it.
+
+# Let's say we want to capture all of this to a new set of files, all
+# ending with "-newshow.xml". Ah, our old friend the subshell is
+# coming back.
+
+for file in scratch/*.xml; do cat $file | sed -e 's/Flintstones/Old-Timey Cavepeople/g' > scratch/$(basename $file .xml)-newshow.xml; done
+
+# But what if you want to edit a file in place?
+
+# Good question. Sed doesn't really let you do that. Or rather linux
+# doesn't. Sed is a stream editor, and editing a file in place would
+# mean being able to read a stream from a file while writing a stream
+# back to it at the same time.
+
+# ...that doesn't mean it can't be done. Just that sed is too small
+# a tool to do that. We'll break out the bigger guns in the next
+# chapter.
