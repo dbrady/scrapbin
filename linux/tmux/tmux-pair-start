@@ -1,0 +1,22 @@
+sudo kill -9 `ps -ef | grep rackup | grep -v grep | awk '{print $2}'`
+start_redis.sh
+start_apollo.sh
+sleep 5
+tmux -S /var/tmux/pairing new-session -s pairing -n editor -d
+tmux -S /var/tmux/pairing source-file /var/git/spa-configs/tmux.conf
+tmux -S /var/tmux/pairing send-keys -t pairing 'cd ~/git' C-m
+tmux -S /var/tmux/pairing send-keys -t pairing 'emacs' C-m
+tmux -S /var/tmux/pairing new-window -n rspec -t pairing
+tmux -S /var/tmux/pairing new-window -n console -t pairing
+tmux -S /var/tmux/pairing new-window -n irb -t pairing
+tmux -S /var/tmux/pairing new-window -n serverices -t pairing
+tmux -S /var/tmux/pairing send-keys -t pairing:2 'cd ~/git' C-m
+tmux -S /var/tmux/pairing send-keys -t pairing:3 'cd ~/git' C-m
+tmux -S /var/tmux/pairing send-keys -t pairing:4 'cd ~/git' C-m
+tmux -S /var/tmux/pairing send-keys -t pairing:5 'cd ~/git' C-m
+tmux -S /var/tmux/pairing rename-window -t pairing:2 rspec
+tmux -S /var/tmux/pairing rename-window -t pairing:3 console
+tmux -S /var/tmux/pairing rename-window -t pairing:4 irb
+tmux -S /var/tmux/pairing rename-window -t pairing:5 serverices
+tmux -S /var/tmux/pairing select-window -t pairing:1
+tmux -S /var/tmux/pairing -2 attach -t pairing

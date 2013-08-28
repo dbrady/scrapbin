@@ -1,0 +1,1 @@
+tmux -S /var/tmux/pairing kill-server
