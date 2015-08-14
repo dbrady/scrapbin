@@ -8,11 +8,15 @@
 # will block the get until the preheat is done, and then allow the get to return
 # items that were preheated.
 
-# The code here seems cluttered because of all the loggingc messages; this is so
-# the output will be clean. Run this ruby file to see the method call trace so
-# you can see that Cache#get on an empty cache triggers Model.preheat, preheat
-# does its thing, and then Cache#get accesses and returns the preheated values
-# without ever requiring the client to check for expiration or initialization.
+# The code here seems cluttered because of all the logging messages; this is so
+# the output will be clean. [Update: I have separated Cache and Model from
+# LoggingCache and LoggingModel. The code could still be cleaner, but it's
+# pretty clear at this point.]
+
+# Run this ruby file to see the method call trace so you can see that Cache#get
+# on an empty cache triggers Model.preheat, preheat does its thing, and then
+# Cache#get accesses and returns the preheated values without ever requiring the
+# client to check for expiration or initialization.
 
 # This on-demand preheating means that we can expire and preheat the cache
 # willy-nilly, without Cache clients having to care about checking for
@@ -29,8 +33,6 @@
 # this example because it's already too long.
 
 require 'observer'
-
-srand 42
 
 # ----------------------------------------------------------------------
 # Cache Class
@@ -219,17 +221,19 @@ end
 # MAIN PROGRAM
 # ----------------------------------------------------------------------
 
+srand 42
+
 log "main: inspecting Model.cache:"
 log LoggingModel.cache.inspect
-log "main: done inspecting Model.cache"
+log "main: done inspecting Model.cache. Note that cache did not preheat."
 
-log "main: Finding models (1..5)"
-models = LoggingModel.find (1..5).to_a
+log "main: Finding models (8..12)"
+models = LoggingModel.find (8..12).to_a
 log "main: models found:"
 models.each do |key, value|
   log "main:   - #{key}: #{value}"
 end
-log "main: Done finding models 1..5."
+log "main: Done finding models (8..12). Note that this first access of the cache triggered preheating, and only values 11-12 were set into cache.."
 log
 
 log "main: Finding models (3..7)"
@@ -238,5 +242,5 @@ log "main: models found:"
 models.each do |key, value|
   log "main:   - #{key}: #{value}"
 end
-log "main: Done finding models 3..7."
+log "main: Done finding models 3..7. Note that all values were cached."
 log
