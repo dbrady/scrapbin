@@ -1,0 +1,3 @@
+#!/bin/sh
+# demo of ruby taking unbuffered keystrokes
+ruby -e 'state=`stty -g`; `stty raw -echo cbreak`; print "Hit a key: "; puts $stdin.getc.inspect; `stty #{state}`'
