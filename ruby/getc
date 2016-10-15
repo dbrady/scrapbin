@@ -1,3 +1,10 @@
 #!/bin/sh
-# demo of ruby taking unbuffered keystrokes
+#
+# demo of ruby reading unbuffered characters (not waiting for you to hit ENTER)
+# Note - this is just characters, not raw keycodes; doesn't capture modifiers or
+# arrow keys, and function keys all return "\e". Works great for letters,
+# numbers, and control characters though.
+#
+# This technique gleaned from the source of Gary Bernhardt's "selecta" program,
+# which (like Gary) is awesome.
 ruby -e 'state=`stty -g`; `stty raw -echo cbreak`; print "Hit a key: "; puts $stdin.getc.inspect; `stty #{state}`'
