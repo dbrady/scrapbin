@@ -1,7 +1,14 @@
 #!/usr/bin/env ruby
-# this is currently set as an alias as echo ${COLUMS}x${LINES}
-# but this is here to remind me how to do it in ruby ;-)
+
+# I currently have this set as an alias as echo ${COLUMS}x${LINES}, but this is
+# here to remind me how to do it in ruby.
 # ruby -r io/console -e 'y,x = $stdout.winsize; puts "#{x}x#{y}"'
+
+# Keeping the alias; it executes in 7-10ms while this script has to invoke ruby,
+# which takes 35-40ms, but still, this is a good reference for scripting.
 require 'io/console'
 y,x = $stdout.winsize
 puts "%dx%d" % [x,y]
+
+# shorter version:
+# puts "%dx%d" % $stdout.winsize.reverse
