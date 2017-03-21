@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# 
+#
 # Trollop example -- because I can never remember the Trollop options.
 #
 # $ ruby ~/ruby/scrapbin/scraps/trollop_example.rb pants foo bar baz --cpus=3 -o rocker
@@ -30,11 +30,11 @@ Usage:
        #{File.basename(__FILE__)} [options] <target> [<extra_args>]
 where [options] are:
 EOS
-  
-  opt :occupation, "Occupation", :type => :string, :default => 'haberdasher'
-  opt :cpus, "CPUs", :type => :integer, :default => 0
-  opt :dynos, "Dynowidget Factor", :type => :float, :default => 1.0
-  opt :kitten, "Kitten?", :type => :boolean, :default => false
+
+  opt :occupation, "Occupation", type: :string, default: 'haberdasher'
+  opt :cpus, "CPUs", type: :integer, default: 0
+  opt :dynos, "Dynowidget Factor", type: :float, default: 1.0
+  opt :kitten, "Kitten?", type: :boolean, default: false
 end
 Trollop::die :dynos, "must be a non-negative number" unless opts[:dynos] >= 0.0
 Trollop::die "Must supply target file" unless ARGV.length > 0
