@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Running an old version of bash that doesn't like to compare against empty
+# strings? Try this instead:
+#
+# if [ "x$1" == "x" ]; then
+
+if [ "$1" == "" ]; then
+    ARGUMENT="default"
+else
+    ARGUMENT=$1
+fi
+
+echo ARGUMENT is $ARGUMENT

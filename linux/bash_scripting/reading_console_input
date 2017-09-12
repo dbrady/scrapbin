@@ -1,0 +1,28 @@
+#1/bin/bash
+echo "Read from the console with 'read varname' (note missing parens)"
+echo 'Then access that variable as $varname (note added parens)'
+echo -n "For example, enter your first name: "
+read firstname
+echo -n "And now your last name: "
+read lastname
+echo "Oh wow, $firstname is an unfortunate name (because obviously) but I forgot you were also a $lastname..."
+echo
+echo "That's... wow. That's really terrible."
+echo
+echo "No seriously, there's a whole website dedicated to your name."
+echo "Go check out http://$firstname.$lastname.isadumb.name/, I'll wait. And... $firstname? I'm so so sorry."
+echo
+echo "You can also read without a variable as a way to force the script to wait for the user to hit ENTER"
+echo -n "I'm about to write the word 'FART' to your terminal a hundred times. Hit Ctrl-C to abort, ENTER to continue: "
+read
+echo 'FART FART FART FART FART FART FART FART FART FART'
+echo ' FART FART FART FART FART FART FART FART FART FART'
+echo '  FART FART FART FART FART FART FART FART FART FART'
+echo '   FART FART FART FART FART FART FART FART FART FART'
+echo '    FART FART FART FART FART FART FART FART FART FART'
+echo '     FART FART FART FART FART FART FART FART FART FART'
+echo '      FART FART FART FART FART FART FART FART FART FART'
+echo '       FART FART FART FART FART FART FART FART FART FART'
+echo '        FART FART FART FART FART FART FART FART FART FART'
+echo '         FART FART FART FART FART FART FART FART FART FART'
+echo Ta-daa.
