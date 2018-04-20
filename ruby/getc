@@ -1,10 +1,55 @@
-#!/bin/sh
+#!/usr/bin/env ruby
 #
 # demo of ruby reading unbuffered characters (not waiting for you to hit ENTER)
-# Note - this is just characters, not raw keycodes; doesn't capture modifiers or
-# arrow keys, and function keys all return "\e". Works great for letters,
-# numbers, and control characters though.
+# Note - this is just characters, not raw keycodes. Keep in mind that weird
+# modifiers or function keys come back as multiple keycodes. Alt-keypresses
+# usually come back as "\e" followed by the key, e.g. M-< is ["\e", "<"]. Arrow
+# keys "\e", "[" followed by A, B, C, or D for Up, Down, Right, and Left
+# respectively. SOME function keys are "\e", "[", and two decimals, e.g. F5 is
+# "\e", "[", "1", "5" and F9 ends with "2", "0".
 #
-# This technique gleaned from the source of Gary Bernhardt's "selecta" program,
-# which (like Gary) is awesome.
-ruby -e 'state=`stty -g`; `stty raw -echo cbreak`; print "Hit a key: "; puts $stdin.getc.inspect; `stty #{state}`'
+# Keys trapped by the operating system or special drivers never
+# arrive. E.g. media keys get sent to the sound driver app and F1 opens the help
+# app in Gnome.
+#
+# Ins/Del/Home/End/PgUp/PgDn arrive as ["\e", "[", "1-6", "~"], where 1-6
+# correspond to 1=Home, 2=Ins, 3=Del, 4=End, 5=PgUp, 6=PgDn
+#
+# Several keys arrive as "\e", "[", "O", such as F2, F3 and F4.
+
+# For much less info but a working example, see The Ruby Cookbook.
+
+# man stty for more info but mostly it'll just confuse you. What you need to
+# know is:
+# 1. stty -g will return the current save in a format you could pass to stty to
+#         restore things when you're done
+# 2. stty raw -echo cbreak will turn on unbuffered input, and now...
+# 3. $stdin.getc will return as soon as any key is pressed
+# 4. stty #{state} restores the original terminal state
+#
+# Additionally,
+
+# 4. You probably want begin { } around steps 1-3 and put step 4 in an
+# ensure. Notably if the user hits Ctrl-C you don't want to leave their bash
+# prompt all trashed and unusable
+#
+# 5. Use this at the point of input, not around your entire program. On OSX you
+# can just wrap your whole program in it but on Linux it breaks the newline
+# character; puts "foo" will write foo and then issue a linefeed but NOT a
+# carriage return. There's probably a way to fix that in stty.
+state=`stty -g` # save old stty state
+system 'stty raw -echo cbreak' # turn off buffered input
+print "Hit a key: "
+chars = []
+chars << $stdin.getc
+if chars.last == "\e" # function/alt/weirdage
+  chars << $stdin.getc
+  if chars.last == "[" # arrow key
+    chars << $stdin.getc
+    if ["O", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].include?(chars.last)
+      chars << $stdin.getc
+    end
+  end
+end
+system "stty #{state}" # restore old stty state
+puts chars.inspect
