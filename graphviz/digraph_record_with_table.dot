@@ -1,0 +1,29 @@
+digraph G
+{
+    rankdir = LR;
+    node1
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr><td port="port1" border="1" bgcolor="red">corpus_language</td></tr>
+                    <tr><td port="port2" border="1">id: en</td></tr>
+                    <tr><td port="port3" border="1">name: Englist</td></tr>
+                    <tr><td port="port4" border="1">sentence_count: 1027686</td></tr>
+                </table>>
+    ]
+    node2
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr><td port="port1" border="1" bgcolor="blue">corpus_sentence</td></tr>
+                    <tr><td port="port2" border="1">id: 1241798</td></tr>
+                    <tr><td port="port3" border="1">text: Baseball is a sport</td></tr>
+                    <tr><td port="port4" border="1">creator_id: 10859</td></tr>
+                    <tr><td port="port5" border="1">created_on: 2006-11-14 17:58:09.303128</td></tr>
+                    <tr><td port="port6" border="1">language_id: en</td></tr>
+                    <tr><td port="port7" border="1">activity_id: 11</td></tr>
+                    <tr><td port="port8" border="1">score: 124</td></tr>
+                </table>>
+    ]
+    node1:port2 -> node2:port6 [label="language_id"]
+}
