@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+# read_from_stdin_or_file
+
+# CAVEAT: 'while read line will' strip leading and trailing whitespace, so this
+# is suboptimal for doing file tidying of JSON or source code :-(
+
+# Source:
+# https://stackoverflow.com/questions/6980090/how-to-read-from-a-file-or-stdin-in-bash?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
+while read line
+do
+  echo "$line"
+done < "${1:-/dev/stdin}"
