@@ -43,7 +43,7 @@ class BinChecker
     if allow_test_bins
       if bin[0] != "0"
         warn "This is a test BIN. Checksum should be ignored/considered valid."
-        warn "But I'm not going to calculate it for you anyway."
+        warn "But I'm going to calculate it for you anyway."
         # return true
       end
     end
