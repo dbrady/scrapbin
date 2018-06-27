@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+# bullet_energy <bullet_weight_in_grains> <velocity_in_feet_per_second>
+#
+# TL;DR:
+#
+# gr * fps * fps
+# --------------
+#     450240
+#
+# Kinetic Energy:
+#
+# Ek = 1/2 * m * v**2
+#
+# How's THAT work? If we start with 1/2 * gr * fps**2:
+#
+# gr * ft**2
+# ----------
+#   2s**2
+#
+# Now, there are 7000 grains in a pound, so
+#
+# gr * ft**2     1lb
+# ---------- * ------
+#  2s**2       7000gr
+#
+# And now we have
+#
+# lb * ft**2
+# -----------
+#  14000s**2
+#
+# The problem is we're still not in foot pounds, because pound is not a unit of
+# mass, but a force experienced by mass on the surface of planet Earth. Which
+# means we literally have to divide out Earth's gravity to get from a mass *
+# distance**2 per time unit:
+#
+# 1 g = 32.16 ft/s**2  # Ballistics tables use 32.16 as a convention
+#
+# lb * ft**2     1s**2
+# ----------- * -------
+#  14000s**2    32.16ft
+#
+# To get a nice, tidy:
+#
+# lb * ft
+# -------
+# 450240
+
+# And THAT'S how you munge together this weird little constant of
+MUNGED_CONSTANT = 450240.0
+GRAINS_PER_GRAM = 15.4324
+FEET_PER_METER = 3.28084
+JOULES_PER_FOOT_POUND = 1.35582
+
+def usage
+  puts "bullet_energy <grains> <fps>"
+end
+
+grains, fps = *ARGV.map(&:to_i)
+
+unless ARGV.size==2 && grains > 0 && fps > 0
+  usage
+  exit -1
+end
+
+def grains_and_fps_to_foot_pounds(grains, fps)
+  grains * fps * fps / MUNGED_CONSTANT
+end
+
+ftlb = grains_and_fps_to_foot_pounds(grains,fps)
+puts "%dgr @ %dfps = %0.2fft·lbf" % [
+       grains,
+       fps,
+       ftlb
+     ]
+
+def grains_to_grams grains
+  grains / GRAINS_PER_GRAM
+end
+def fps_to_mps fps
+  fps / FEET_PER_METER
+end
+def ftlb_to_j ft_lb
+  ft_lb * JOULES_PER_FOOT_POUND
+end
+puts "%dg @ %dm/s = %0.2fj" % [
+       grains_to_grams(grains),
+       fps_to_mps(fps),
+       ftlb_to_j(ftlb)
+     ]
