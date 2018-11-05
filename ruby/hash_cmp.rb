@@ -44,6 +44,9 @@ require 'io/console'
 
 # - [ ] Make this tool so much easier to use
 
+#   - [ ] gemify this file so it's easier to load than just jamming in a
+#         load_file whenever you want to use it.
+
 #   - [ ] It's a PIA to have to copy and paste the RSpec diff into a file and
 #         then manually edit the diff into h1 = {...}, h2 = {...}. Brainstorm
 #         solutions for this. Adding a parse_diff method that takes the string
@@ -103,7 +106,7 @@ require 'io/console'
 # ----------------------------------------------------------------------
 # Usage:
 #
-# load File.expand_path("~/bin/hash_cmp.rb")
+# load File.expand_path("~/devel/scrapbin/ruby/hash_cmp.rb")
 #
 # hash1 = { "a" => { "b" => 64, "c" => 13 }
 # hash2 = { "a" => { "b" => 63, "c" => 13 }
