@@ -6,7 +6,8 @@ require 'colorize'
 require 'io/console'
 
 # TODO:
-# - [ ] Move this into ~/bin repo, I'm gonna be using it a LOT more
+# - [X] PUNT. Move this into ~/bin repo, I'm gonna be using it a LOT more. No,
+#       just figure out how to share this properly. Make a gem or whatevs.
 
 # - [ ] Make this so much more pretty
 
@@ -22,7 +23,8 @@ require 'io/console'
 #         accommodate.
 
 #     - [ ] Simplest version, just calculate the screen width and build a
-#           formatter off of that.
+#           formatter off of that. Caveat: have to calculate the depth of the
+#           LHS hash and use the max indent as part of the calculation.
 
 #     - [X] PUNTING. MUCH trickier version, prescan the hash and calculate
 #           indent + key + value pairs all the way down, and shrink the
@@ -86,15 +88,8 @@ require 'io/console'
 #       of order with each other. The RHS hash gets reordered to match the LHS
 #       anyway.
 
-# - [X] Handle arrays - YAGNI so far. Arrays, even large ones, have been coming
-#       through just fine. They get compared for equality AND order, and so far
-#       all the test data I've run through this just happens to have not had a
-#       major problem with the arrays. If that changes, update this
-#       tool. Remember that Array#fetch(index) works exactly like
-#       Hash#fetch(key) so the hardest part of making this change honestly would
-#       be updating the renderer to render indexes and maybe to change the
-#       pretty-print `parent => {...}` stuff to read `parent => [...]` and so
-#       on.
+# - [ ] Handle arrays - Finally got a monster array of hashes that was
+#       different, so this just went from YAGNI to Totes GNI
 
 # - [X] Handle JSON? - YAGNI. Currently we've only even had monstrous hashes to
 #       deal with. If that changes we'll first attempt to deal with it by
@@ -117,8 +112,66 @@ require 'io/console'
 # hash_cmp hash1, hash2
 # ----------------------------------------------------------------------
 
+# def array_deep_dup(array)
+#   array.map do |item|
+#     if item.is_a? Hash
+#       hash_deep_dup item
+#     elsif item.is_a? Array
+#       array_deep_dup item
+#     else
+#       item.dup
+#     end
+#   end
+# end
+
+# def hash_deep_dup(hash)
+#   Hash[
+#     *hash.keys.dup.map do |key|
+#       [
+#         key,
+#         if hash[key].is_a? Hash
+#           hash_deep_dup(hash[key])
+#         elsif hash[key].is_a? Array
+#           array_deep_dup(hash[key])
+#         else
+#           hash[key].dup
+#         end
+#       ]
+#     end
+#   ]
+# end
+
+def hash_depth(hash, depth=1)
+  hash
+    .values
+    .dup
+    .keep_if {|val| val.is_a? Hash }
+    .map {|h| hash_depth(h, depth+1) }.max || depth
+end
+
+def longest_indented_key(hash, depth=1)
+  indent = "  " * depth
+  spaces = indent.size
+  [
+    hash.keys.map(&:size).max + spaces,
+    hash
+      .values
+      .dup
+      .map { |value| value.is_a?(Hash) ? longest_indented_key(value, depth+1) : 0  }
+      .max
+  ].max
+end
+
 def hash_cmp(h1, h2, tabs=0)
   indent = "  " * tabs
+  # TODO - this is wrong. Don't get max_indent. Use longest_indented_key above
+  # to calculate where the deepest => will go. If two of those fit on about a
+  # third of the screen width, then that's the width of the key in the format
+  # string. Divide the remaning two thirds as the value fields. If they DON'T
+  # fit... then... um... math.
+  max_indent = "  " * [hash_depth(h1), hash_depth(h2)].max
+  screen_width = $stdout.winsize[1]
+
   (h1.keys + h2.keys).uniq.each do |key|
     v1, v2 = h1[key], h2[key]
     if v1.is_a?(Hash)
