@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+
+echo Sequences. Ways of generating numeric sequences:
+
+echo 'Never forget the stone axe; you can always hardcode the list:'
+echo 'for x in 1 2 3 4 5; do echo -n "$x "; done; echo'
+for x in 1 2 3 4 5; do echo -n "$x "; done; echo
+echo
+
+echo 'Use seq to generate sequences from 1 to n, m to n, or m to n in steps of k'
+echo 'echo $(seq 5)'
+echo $(seq 5)
+echo 'echo $(seq 3 8)'
+echo $(seq 3 8)
+echo 'echo $(seq 0 5 100)'
+echo $(seq 0 5 100)
+echo
+
+echo 'If you are using hardcoded integers ($vars do not work), you can use {m..n}:'
+echo 'echo {1..5}'
+echo {1..5}
+echo
