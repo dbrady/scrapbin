@@ -9,7 +9,8 @@ echo 'for x in 1 2 3 4 5; do echo -n "$x "; done; echo'
 for x in 1 2 3 4 5; do echo -n "$x "; done; echo
 echo
 
-echo 'Use seq to generate sequences from 1 to n, m to n, or m to n in steps of k'
+echo 'seq is the most powerful tool; `man seq` for LOTS of great info.'
+echo 'TL;dr seq will generate sequences from 1 to n, m to n, or m to n in steps of k'
 echo 'echo $(seq 5)'
 echo $(seq 5)
 echo 'echo $(seq 3 8)'
