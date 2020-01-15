@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 #
-# Trollop example -- because I can never remember the Trollop options.
+# Optimist example -- because I can never remember the Optimist options.
 #
-# $ ruby ~/ruby/scrapbin/scraps/trollop_example.rb pants foo bar baz --cpus=3 -o rocker
-# Trollop Options:
+# $ ruby ~/ruby/scrapbin/scraps/optimist_example.rb pants foo bar baz --cpus=3 -o rocker
+# Optimist Options:
 #       occupation: rocker
 # occupation_given: true
 #             cpus: 3
@@ -18,13 +18,13 @@
 #     1: bar
 #     2: baz
 
-require 'trollop'
+require 'optimist'
 
 # Parse options
-opts = Trollop.options do
+opts = Optimist.options do
   version "#{File.basename(__FILE__)} 1.0.0 (C) 2010 David Brady"
   banner <<-EOS
-This script is a Trollop examplar, because I can never remember which options and crap I can include. More examples at http://trollop.rubyforge.org/
+This script is a Optimist examplar, because I can never remember which options and crap I can include. More examples at http://optimist.rubyforge.org/
 
 Usage:
        #{File.basename(__FILE__)} [options] <target> [<extra_args>]
@@ -36,10 +36,10 @@ EOS
   opt :dynos, "Dynowidget Factor", type: :float, default: 1.0
   opt :kitten, "Kitten?", type: :boolean, default: false
 end
-Trollop::die :dynos, "must be a non-negative number" unless opts[:dynos] >= 0.0
-Trollop::die "Must supply target file" unless ARGV.length > 0
+Optimist::die :dynos, "must be a non-negative number" unless opts[:dynos] >= 0.0
+Optimist::die "Must supply target file" unless ARGV.length > 0
 
-puts "Trollop Options:"
+puts "Optimist Options:"
 longest_key = opts.keys.map{|k| k.to_s.length}.max
 format = "%#{longest_key}s: %s"
 opts.each_pair do |key, val|
