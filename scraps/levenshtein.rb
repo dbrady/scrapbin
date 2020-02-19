@@ -19,12 +19,13 @@ class String
   # NOTE! This is an INSANELY recursive function that executes in
   # exponential time. Use it on short strings only, please! Execution
   # time for 1k strings is on the order of 3-8 seconds--and even then
-  # only if they are very close. 256b strings are below 1s; short
+  # ONLY if they are very close. 256b strings are below 1s; short
   # strings are very fast. (Times are on a dual-core 2.5GHz machine
   # with 4GB of RAM)
   #
-  # WARNING: For very disparate strings, the exponent grows VERY
-  # quickly. For the function:
+  # WARNING: For very disparate strings, the exponent grows VERY quickly. A
+  # 12-character string with an edit distance of 12 (completely different
+  # strings) takes over an hour on a 2010-era machine.
   #
   # "abcdefghijklm".edit_distance_to("nopqrstuvwxyz")
   #
@@ -46,5 +47,23 @@ end
 if $0 == __FILE__
   # Don't run this, it'll need 17 heat deaths (just kidding, it'll blow stack)
   # puts "How many roads must a man walkdown".edit_distance_to("before you call him a man?")
-  puts "cheese".edit_distance_to("breeze")
+
+  # Do run this, it's a less destructive problem
+  puts "Mike".edit_distance_to("Mark")
+  # => 3
+  # TODO: Would be nice to see the actual edits. Levenshtein is smart enough to
+  # do it either of two ways:
+  # 1. "Mike".change(1, "a")
+  #    # => "Make"
+  #    .change(2, "r")
+  #    # => "Mare"
+  #    .change(3, "k")
+  #    # => "Mark"
+  # 2. "Mike"
+  #    .change(1, "a")
+  #    # => "Make"
+  #    .insert(2, "r")
+  #    # => "Marke"
+  #    .delete(4)
+  #    # => "Mark"
 end
