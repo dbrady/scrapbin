@@ -1,0 +1,11 @@
+#!/bin/bash
+if [[ `uname -s` == "Darwin" ]]; then
+    echo "OSX"
+elif [[ `uname -s` == "Linux" ]]; then
+    echo "Linux"
+else
+    echo "Unknown OS. Not Darwin or Linux, but /usr/bin/uname. Unix, maybe? Raspbian?"
+    echo "If you find out, please update $0 with this new information."
+    echo "uname -s reported:"
+    uname -s
+fi
