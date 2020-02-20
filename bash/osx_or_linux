@@ -1,7 +1,7 @@
 #!/bin/bash
-if [[ `uname -s` == "Darwin" ]]; then
+if [ `uname -s` == "Darwin" ]; then
     echo "OSX"
-elif [[ `uname -s` == "Linux" ]]; then
+elif [ `uname -s` == "Linux" ]; then
     echo "Linux"
 else
     echo "Unknown OS. Not Darwin or Linux, but /usr/bin/uname. Unix, maybe? Raspbian?"
