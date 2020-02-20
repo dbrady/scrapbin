@@ -4,8 +4,11 @@ if [ `uname -s` == "Darwin" ]; then
 elif [ `uname -s` == "Linux" ]; then
     echo "Linux"
 else
-    echo "Unknown OS. Not Darwin or Linux, but /usr/bin/uname. Unix, maybe? Raspbian?"
+    echo "Unknown OS. Not Darwin or Linux, but /usr/bin/uname exists. Some unix, maybe? Raspbian?"
+    echo 'Oh good Lord, are you working with SPOX again?!?'
     echo "If you find out, please update $0 with this new information."
-    echo "uname -s reported:"
+    echo "uname -s reports:"
     uname -s
+    echo "uname -a reports:"
+    uname -a
 fi
