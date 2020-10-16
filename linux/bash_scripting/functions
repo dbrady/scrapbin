@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Use keyword function followed by braces
+# Args are passed in just like CLI args to the main script, e.g. $1, $2 etc
+function blart_first {
+    echo -n "blart_first: "
+    echo $1
+}
+
+# Args can be iterated via shift
+function blart_each {
+    echo "blart_each: "
+    while [ "$1" != "" ]; do
+        echo "  $1"
+        shift
+    done
+}
+
+function blart_all {
+    echo -n "blart_all: "
+    echo $*
+}
+
+blart_first one two three
+blart_each one two three
+blart_all one two three
