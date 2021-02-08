@@ -1,0 +1,3 @@
+#!/bin/bash
+# Say you want to run a script with some environment settings -- a common trick in ECS
+# . <(xargs -0 bash -c 'printf "export %q\n" "$@"' -- </proc/1/environ)
