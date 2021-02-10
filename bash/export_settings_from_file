@@ -1,3 +1,8 @@
 #!/bin/bash
 # Say you want to run a script with some environment settings -- a common trick in ECS
 # . <(xargs -0 bash -c 'printf "export %q\n" "$@"' -- </proc/1/environ)
+
+# Breakdown:
+# . - shorthand for source
+# bash -c - execute a command under bash
+# </proc/1/environ - in linux, proc/1/environ
