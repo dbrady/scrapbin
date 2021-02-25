@@ -52,3 +52,43 @@
 #     3
 #   ]
 # }
+
+class Hash
+  class PrettyPrint
+    def self.pretty_print(data, indent="")
+      longest_key = data.keys.map(&:size).max
+      format = "#{indent}%#{longest_key}s: %s"
+      puts indent + "{"
+      data.each_pair do |key, value|
+        # temp hacks for now, need cleaner/longer/better way...
+        if value.is_a? Array
+          puts format % [key, value.inspect]
+        elsif value.is_a? Hash
+          print format % [key, ""]
+          pretty_print value, indent + "  "
+        else
+          puts format % [key, value]
+        end
+      end
+      puts indent + "}"
+    end
+  end
+end
+
+if __FILE__==$0
+  h = {
+    pigtruck: "sandwich",
+    pants: true,
+    dwarves: %w(Grumpy Dopey Doc Happy Bashful Sneezy Sleepy),
+    address: {
+      street: "123 Fake St",
+      city: "Testville",
+      state: "AS",
+      zip_code: 96799
+    },
+    cheeses: 7
+  }
+
+  Hash::PrettyPrint.pretty_print h
+
+end
