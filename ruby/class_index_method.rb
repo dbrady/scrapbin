@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # class index method - howtf does 'class MyMigration < ActiveRecord::Migration[6.0]' even work?
-
+#
+# Answer: `def Migration.[](index)` returns index's version of the Migration class.
 class Version1
   def whoami
     "Version 1"
