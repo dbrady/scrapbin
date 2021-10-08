@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 # pp_justify_hash.rb - Pretty print a ruby hash with values tabulated.
+
+# 2021-10-08 Dave Makes A Historical Note: Originally created in November 2018,
+# this file is still "programming by wishful thinking" or "Readme-Driven
+# Development".
+
 #
 # simple example:
 # pp_justify_hash { foo: 42, bar: 13, arglebargle: 99 }
