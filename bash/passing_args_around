@@ -1,0 +1,67 @@
+#!/bin/bash
+# passing_args_around
+
+# NOTE: Poor man's args. No getopts here, just $1 and $@ and stuff.
+
+# ----------------------------------------------------------------------
+# optional argument
+# ----------------------------------------------------------------------
+
+# 1. Test $# for 0. This can be defeated by calling `myscript ""`
+if [ $# == 0 ]; then
+    echo You gave zero args
+else
+    echo You gave $# args
+fi
+
+# 2. Test $1 for blank. This can ALSO be defeated with `myscript ""` Note that
+# really old versions of bash don't support this and you may see `if "$1x" ==
+# "x" ]` in the wild.
+if [ $1 == "" ]; then
+    echo You gave zero args
+else
+    echo You gave $# args
+fi
+
+echo You gave $# args
+echo Arg 1 was $1
+
+# ----------------------------------------------------------------------
+# Setting a value to optional or default
+# ----------------------------------------------------------------------
+
+# 1. Set at outer scope, then overwrite conditionally. Feels nice to C-style
+# programmers because the outer scope set can be at the top of the script with
+# all the variable declarations. Also there's no question that the value won't
+# pass out of scope and vanish outside the if block.
+DELAY=5
+if [ $1 != "" ]; then
+    DELAY=$1
+fi
+echo Delay is now set to $DELAY
+
+# 2. Set in if/then/else. Can look cleaner when both values are calculated or
+# munged, or when you want to demonstrate that variables in bash aren't shadowed
+# inside an if test and thus don't pass out of scope afterwards
+if [ $1 == "" ]; then
+    DELAY2=5 # default
+else
+    DELAY2=$1
+fi
+echo Delay2 is now set to $DELAY2
+
+
+# ----------------------------------------------------------------------
+# Passing args to other scripts
+# ----------------------------------------------------------------------
+# tl;DR if you wrap $@ in double quotes, it will preserve the quotations of the
+# individual arguments, i.e. if you call `script "one two" three` and script
+# calls `otherscript "$@"` it will correctly receive "one two" as $1 and "three"
+# as $2
+
+# This will break up args that have spaces into separate args, which is almost
+# never what I want.
+# othescript $@
+
+# This does what I want.
+# otherscript "$@"
