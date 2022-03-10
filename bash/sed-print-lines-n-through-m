@@ -1,0 +1,17 @@
+#!/bin/bash
+# sed-print-lines-n-through-m
+
+# TIL! I've been doing this with `cat -n file | grep
+# <pattern_matching_line_numbers>`. But sed is BUILT to do this out of
+# the box.
+
+echo "Try this:"
+echo '  sed -n "2,4p" file1.txt'
+echo "See 'man sed' for extended details, but:"
+echo "  -n stops sed from printing every line by default"
+echo "  [2addr]p tells sed to print the addressed lines"
+echo "  2,4 means lines 2-4"
+echo "  3 would mean print JUST line 3"
+
+# print lines 2-4 of file1.txt
+sed -n "2,4p" file1.txt
