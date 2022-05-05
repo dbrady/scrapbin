@@ -33,8 +33,9 @@
 #   ranges, e.g. del ray[1:3]. Raises ValueError if list does not contain
 #   item.
 
-# - list.pop([index]) - Removes item at index, or from the end of the list if no
-#   index is given.
+# - list.pop([index]) - Removes item at index, or from the end of the
+#   list if no index is given. Differs from del by return value (pop
+#   returns the item, del returns None)
 
 # - list.clear() - Removes all items from the list. Equivalent to del list[:]
 
@@ -67,3 +68,5 @@
 # ray.unshift(item) - list.insert(0, item)
 
 # ray.push(item) - list.append(item)
+
+# ray.include?(item) - "item in list".
