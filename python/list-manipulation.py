@@ -70,3 +70,49 @@
 # ray.push(item) - list.append(item)
 
 # ray.include?(item) - "item in list".
+
+# ray.sort
+# ray.sort_by
+# ray.max
+# ray.max_by
+
+# ray.map
+# ray.inject
+
+# ray.grep(/regex/) / ray.grep_v(/regex/)
+# In Python, list.grep is a subcase of filtering with a function or a lambda.
+# General case: return all scores over 70:
+ray = [10, 90, 15, 83]
+def good_score(n):
+    return n > 70
+
+ray2 = filter(good_score, ray) # which returns a "filter object", lets cast it to a list
+print(list(ray2))
+# => [90, 83]
+
+# Now with a lambda
+ray2 = filter(lambda x: x > 70, ray)
+print(list(ray2))
+# => [90, 83]
+
+# Now matching a regex is its own thing:
+names = ['Alice Johnson', 'Bob Dobson', 'Carol Smith', 'Dave Ericson']
+import re
+regex = re.compile('son$')
+
+names2 = filter(lambda name: regex.search(name), names)
+print(list(names2))
+
+# Ooof. I'm trying to love you, Python. I really am. But is the compile necessary? Or the backcast from list?
+# Equivalent ruby:
+# names = ['Alice Johnson', 'Bob Dobson', 'Carol Smith', 'Dave Ericson']
+# puts names.grep(/son$/)
+
+# Even if I didn't use grep and did a list filter, it's still cleaner imo:
+# names = ['Alice Johnson', 'Bob Dobson', 'Carol Smith', 'Dave Ericson']
+# names.keep_if {|name| name =~ /son$/ }
+# puts names
+
+# Sigh. It's easier for a familiar developer to skim over boilerplate than it is for an unfamiliar maintainer to intuit
+# the existence of hidden code... If the code you need to see is aaa and the code that's boilerplate is bbb then
+# "bbb(aaa)" is better than "run()". 
