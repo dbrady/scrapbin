@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+# next-letter-histogram - stoopid hacklet to show the distribution of letters
+# that follows 'th' in English. Sparked by an offhand comment about randomness
+# and redundancy in a Veritasium video:
+# https://www.youtube.com/watch?v=sMb00lz-IfE&t=98s
+
+# After a 'th', there will probably be an 'e'.
+
+histogram = Hash.new 0
+
+IO.readlines("/usr/share/dict/words").map(&:strip).each do |word|
+  index = 0
+  while position = word.index("th", index)
+    next_letter = word[position+2]
+    histogram[next_letter] += 1
+
+    index = position+1
+  end
+end
+
+puts "+--------+-------+---------+"
+puts "| Letter | Count | Total % |"
+puts "+--------+-------+---------+"
+
+total = histogram.values.sum
+
+histogram.to_a.sort {|a,b| a[1] <=> b[1] }.each do |letter, count|
+  percent = (count * 100.0) / total
+  printf "| %6s | %5d | %7.3f |\n", letter, count, percent
+end
+
+puts "+--------+-------+---------+"
