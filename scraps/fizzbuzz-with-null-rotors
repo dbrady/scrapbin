@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+# fizzbuzz-with-null-rotors
+#
+# Given a pair of "rotors" that cycle through hits and misses, a miss
+# from both rotors means "just print the number".
+
+fizz_rotor = [nil, nil, "Fizz"].cycle
+buzz_rotor = [nil, nil, nil, nil, "Buzz"].cycle
+
+# If nil + String and String + nil both returned String (instead of crashing), we could have:
+#
+# puts (1..100).map { |i| fizz_rotor.next + buzz_rotor.next || i }
+#
+# or perhaps
+#
+# (1..100).each { |i| puts((fizz_rotor.next + buzz_rotor.next) || i) }
+
+# class String
+#   alias_method :orig_plus, :+
+
+#   def +(other)
+#     return self if other.nil?
+#     orig_plus other
+#   end
+# end
+
+# class NilClass
+#   def +(other)
+#     return other
+#   end
+# end
+
+# ...However, I think that's a gratuitously implicit abstraction. It's
+# more expressive, I think, and ironically golfs out much shorter,
+# with an explicit add method:
+def add_fb(f, b)
+  return nil if f.nil? && b.nil?
+
+  "#{f}#{b}"
+end
+
+(1..100).each do |i|
+  # puts((fizz_rotor.next + buzz_rotor.next) || i)
+  puts(add_fb(fizz_rotor.next, buzz_rotor.next) || i)
+end
