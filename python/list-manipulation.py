@@ -82,9 +82,14 @@
 # ray.grep(/regex/) / ray.grep_v(/regex/)
 # In Python, list.grep is a subcase of filtering with a function or a lambda.
 # General case: return all scores over 70:
+import re
+
 ray = [10, 90, 15, 83]
+
+
 def good_score(n):
     return n > 70
+
 
 ray2 = filter(good_score, ray) # which returns a "filter object", lets cast it to a list
 print(list(ray2))
@@ -97,7 +102,6 @@ print(list(ray2))
 
 # Now matching a regex is its own thing:
 names = ['Alice Johnson', 'Bob Dobson', 'Carol Smith', 'Dave Ericson']
-import re
 regex = re.compile('son$')
 
 names2 = filter(lambda name: regex.search(name), names)
