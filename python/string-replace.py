@@ -19,3 +19,8 @@ print(re.sub("b([a-z]*)", "B\\1", "foo bar baz baaz qux"))
 print("raw strings (r'...') do not need to escape the backslash:")
 print('re.sub("b([a-z]*)", r"B\\1", "foo bar baz baaz qux")')
 print(re.sub("b([a-z]*)", r"B\1", "foo bar baz baaz qux"))
+
+print()
+print("Replace regex with a programmatic calculation on that match")
+print('re.sub("b([a-z]+)", lambda x: f"b{len(x.group(1))}", "foo bar baar baaaaz qux")')
+print(re.sub("b([a-z]+)", lambda x: f"b{len(x.group(1))}", "foo bar baar baaaaz qux"))
