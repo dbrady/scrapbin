@@ -1,0 +1,17 @@
+#!/bin/bash
+# tl;dr: if [ -z "$var" ]; then ... fi
+
+# check if script was passed no args
+if [ $# -eq 0 ]; then
+   echo 'if [ $# -eq 0 ] is true; no arguments given to this script'
+fi
+
+# check if a specific shell variable exists
+if [ -z "$1" ]; then
+    echo 'if [ -z "$1" ] is true; arg 1 is empty'
+fi
+
+# ...or is missing
+if [ ! -z "$1" ]; then
+    echo 'if [ ! -z "$1" ] is true; arg 1 is present'
+fi
