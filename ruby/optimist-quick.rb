@@ -1,15 +1,14 @@
 #!/usr/bin/env ruby
 require 'optimist'
 
-# Parse options
 opts = Optimist.options do
-  opt :occupation, "Occupation", type: :string, default: 'haberdasher'
-  opt :cpus, "CPUs", type: :integer, default: 0
-  opt :dynos, "Dynowidget Factor", type: :float, default: 1.0
-  opt :kitten, "Kitten?", type: :boolean, default: false
+  opt :flag # type is inferred from default, or boolean if nothing specified
+  opt :string, "String", type: :string, default: 'value'
+  opt :integer, "Integer", type: :integer, default: 42
+  opt :float, "Float", type: :float, default: 69.42
 end
 
-puts "occupation: #{opts[:occupation].inspect}"
-puts "cpus: #{opts[:cpus].inspect}"
-puts "dynos: #{opts[:dynos].inspect}"
-puts "kitten: #{opts[:kitten].inspect}"
+puts sprintf("Flag: %s", opts[:flag].inspect)
+puts sprintf("String: %s", opts[:string])
+puts sprintf("Integer: %d", opts[:integer])
+puts sprintf("Float: %5.20f", opts[:float])
