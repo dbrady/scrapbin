@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+# TL;dr it's this nonsense:
+# expandvars will expand $HOME (and any/all other vars)
+# expanduser will expand ~/ and ~username
+os.path.expandvars(os.path.expanduser("$HOME/pants"))
+os.path.expandvars(os.path.expanduser("~/pants"))
+os.path.expandvars(os.path.expanduser("~david.brady/pants"))
+
 # Ruby:
 # dirname = File.dirname(__FILE__)
 # filename = File.join(dirname, 'relative/path/to/file')
