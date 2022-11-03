@@ -9,6 +9,9 @@ import datetime
 now = datetime.datetime.now()
 
 print("You can use now.strftime('format'), like so:")
+print("import datetime")
+print("now = datetime.datetime.now()")
+print('now.strftime("%F %T")') # %F = %Y-%m-%d and %T = %H:%M:%S
 print(now.strftime("%F %T")) # %F = %Y-%m-%d and %T = %H:%M:%S
 
 print()
