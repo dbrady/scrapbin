@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 
-# Can we write our own context managers? E.g. we have a DB class that we want to
-# open a connection that should be closed (possibly to ensure I/O gets flushed).
+# Can we write our own context managers? (Context: I don't mean is it physically
+# possible, I mean we currently do not use these and it may present as an
+# overcomplicated concept. Is it within the scope of our team's learning and
+# comfort curves to include them in our DS package?)
+
+# E.g. we have a DB class that we want to open a connection that should be
+# closed (possibly to ensure I/O gets flushed).
 
 # A CM has two methods, __enter__ and __exit__.
 
@@ -19,7 +24,12 @@
 #     print(f.read())
 
 
-# OOOH. Or here's an actually useful version of it. I'm dropping input.csv into the folder.
+# ----------------------------------------------------------------------
+# A Context Manager for CSV Files
+# ----------------------------------------------------------------------
+
+# OOOH. Or here's an actually useful version of it. Please note dependency on
+# widgets-sae.csv and widgets-metric.csv, which I have added to the repo.
 
 # given an input csv file of widgets in SAE, let's create an output
 # file of metric widgets, rounding size to the nearest millimeter.
@@ -96,3 +106,48 @@ with CsvWriter("widgets-metric.csv") as writer:
 #     for row in csv.DictReader(open("widgets-sae.csv")):
 #         mm = round(25.4 * float(row["size"]))
 #         writer.writerow([row["id"], row["name"], f"{mm}mm", row["color"]])
+
+# ----------------------------------------------------------------------
+# A Context Manager For Logging
+# ----------------------------------------------------------------------
+
+# Remember way back when, in C++, when I loved the fact that destructors
+# automatically got called when an object passed out of scope, and we used that
+# to have entry/exit loggers that could log exactly when their scope was
+# destroyed? And how I had to abandon this is GC languages, even with Ruby and
+# Python's finalizers, because they run only as a courtesy at garbage
+# collection, and might not even run at all at program exit? Yeah. Bummer.
+
+# But! We could try using a context manager, like so:
+
+# def my_func(*args, **kwargs):
+#     with ScopeLogger("my_func") as logger:
+#         logger.log("whatever")
+
+# It's not perfectly transparent (in Python you'd have to indent/outdent the
+# whole function every time you added and removed it (and remember a lot of my
+# code has to be quickly shimmed in and out with "nocommit" comments.
+
+
+import os, datetime
+
+class ScopeLogger:
+    # TODO: maybe make class vars to configure the logging directory and/or a
+    # central logging system, then all the ScopeLoggers would communicate
+    # through that rather than knowing where the logging folder is.
+    def __init__(self, name):
+        self.name = name
+        self.filename = os.path.expanduser(f"~/logs/{self.timestamp()}.log")
+        self.logfile = open(filename, "a")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        self.logfile.close()
+
+    def log(self, msg):
+        self.logfile.write(f"{self.timestamp()} {self.name}: {msg}\n")
+
+    def timestamp(self):
+        datetime.datetime.now().strftime('%F')
