@@ -17,6 +17,9 @@ import sys
 
 # 2. exit() - Do not use. Same reason.
 
+#    HOWEVER. If you DO control the deployment, this is the easiest one to use
+#    and that might be okay. Hello from the post-Docker era.
+
 # 3. sys.exit(int) - Standard way to cleanly exit from the main
 #    program. Cleans up handlers, closes files, flushes I/O buffers,
 #    etc.
