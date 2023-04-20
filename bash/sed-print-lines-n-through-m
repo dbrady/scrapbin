@@ -1,9 +1,12 @@
 #!/bin/bash
 # sed-print-lines-n-through-m
-
-# TIL! I've been doing this with `cat -n file | grep
-# <pattern_matching_line_numbers>`. But sed is BUILT to do this out of
-# the box.
+#
+# TIL! I've been doing this with cat -n + grep, or head | tail math. To print lines 100-119:
+#
+# cat -n file | grep -E '1[01]\d\s'   # with line numbers because cat -n
+# head -n 119 file | tail -n 20       # no line numbers
+#
+# BUT! sed is BUILT to do this out of the box.
 
 echo "Try this:"
 echo '  sed -n "2,4p" file1.txt'

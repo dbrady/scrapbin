@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# IMPORTANT: linux sed and unix sed are NOT a perfect match. Ferinstance, Unix
+# sed has no step operator, e.g. print every 3rd line with sed -n
+# '1~3p'. Consult your local manpage for portability.
+
+echo -e "\033[36msed Quick Reference\033[0m"
+echo
+echo "Alternate delimiters: @%|;: . Good when regex has slashes in it. cat routes.txt | sed 's|/usr/bin|/local|g'"
+echo "Get whole match: & . Replace /bin and /sbin with /bin/local and /sbin/local: sed -E 's|s?bin|&/local|'"
+echo "Grouping partial match: put ) after initials: cat names.txt | sed -E 's%(^|\W)(\S)%\1\2)%g'"
+echo
+echo "IMPORTANT: linux sed != unix sed. Check manpage for subtleties, like no first~step in Unix."
+echo
+echo "See Also: https://www.gnu.org/software/sed/manual/html_node/advanced-sed.html"
