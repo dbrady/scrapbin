@@ -1,0 +1,28 @@
+#!/bin/bash
+# pipe-or-terminal
+
+echo You can detect the terminal type of stdin, stdout, and stderr with
+echo the -t fd test operator.
+echo stdin: -t 0
+echo stdout: -t 1
+echo stderr: -t 2
+echo
+echo To test this, try running this script differently:
+echo
+echo "./pipe-or-terminal            # stdin and stdout are both terminals"
+echo "echo | ./pipe-or-terminal     # stdin is not a terminal"
+echo "./pipe-or-terminal | cat      # stdout is not a terminal"
+echo
+
+if [ -t 0 ]; then
+    echo stdin is a terminal: You are connected directly to this script.
+else
+    echo stdin is NOT a terminal: You are piping input into this script.
+fi
+
+
+if [ -t 1 ]; then
+    echo -e "\033[36mYou are connected to a terminal. This line will be colorized cyan.\033[0m"
+else
+    echo "You are catching my output in a pipe. This line will NOT be colorized."
+fi
