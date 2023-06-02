@@ -20,9 +20,12 @@ else
     echo stdin is NOT a terminal: You are piping input into this script.
 fi
 
-
-if [ -t 1 ]; then
-    echo -e "\033[36mYou are connected to a terminal. This line will be colorized cyan.\033[0m"
-else
+# Same thing, but with stdout, and use inline x && y || z logic with
+# the test command.  This is useful if you're doing a monsterhuge bash
+# script that chains everything together into a single command with
+# booleans for success. Why would I want that? I don't want that. I
+# don't know what you're talking about. Don't look at my bin folder
+# DON'T LOOK AT MY BIN FOLDER
+test -t 1 &&
+    echo -e "\033[36mYou are connected to a terminal. This line will be colorized cyan.\033[0m" ||
     echo "You are catching my output in a pipe. This line will NOT be colorized."
-fi
