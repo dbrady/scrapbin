@@ -14,9 +14,11 @@ The most common use case I see for this is colorizing output on the terminal but
 disabling colorization if you're writing to a pipe. The colorize gem provides a
 global convenience method for this, String.disable_colorization. With no args,
 returns the current colorization status. with a boolean, sets the status. You
-probably just want this:
+probably just want:
 
 String.disable_colorization(true) unless $stdout.tty?
+
+(Don't forget to check $stderr if you're writing colorized errors to stderr.)
 
 This entire block of text will print in color if $stdout is a tty. Try running
 one or more of these commands:
