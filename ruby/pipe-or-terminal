@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+require "colorize"
+String.disable_colorization(true) unless $stdout.tty?
+
+message = <<BLARB
+Ruby provides IO.tty? as a convenience method to determine if that
+IO stream is connected to a terminal (returns true) or a pipe (false).
+
+stdin: $stdin.tty?        (currently: #{$stdin.tty?.inspect})
+stdout: $stdout.tty?      (currently: #{$stdout.tty?.inspect})
+stderr: $stderr.tty?      (currently: #{$stderr.tty?.inspect})
+
+The most common use case I see for this is colorizing output on the terminal but
+disabling colorization if you're writing to a pipe. The colorize gem provides a
+global convenience method for this, String.disable_colorization. With no args,
+returns the current colorization status. with a boolean, sets the status. You
+probably just want this:
+
+String.disable_colorization(true) unless $stdout.tty?
+
+This entire block of text will print in color if $stdout is a tty. Try running
+one or more of these commands:
+
+#{__FILE__}                     # all tty
+#{__FILE__} | cat               # stdout is not a tty
+echo | #{__FILE__}              # stdin is not a tty
+#{__FILE__} 2>&1 | cat          # stdout and stderr are not ttys
+echo | #{__FILE__} 2>&1 | cat   # stdin, stdout and stderr are not ttys
+BLARB
+
+puts message.cyan
