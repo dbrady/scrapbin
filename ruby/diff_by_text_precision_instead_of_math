@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Just keeping this around for posterity. Given two csv files of key,value,
+# where the first file contains a list of keys,values and the second contains
+# just the keys whose values have changed, print a side-by-side diff showing the
+# reference against the changes.
+#
+# UPDATE: Dear Posterity, don't do it this way. You'll get errors when 9's roll
+# over into 0's because the next digit up changes. Calculate the delta. It's
+# 1.0/10**scale. See example at EOF.
+#
+# E.g. given
+# file 1
+# alice,5
+# bob,3
+# carol,9
+#
+# file 2
+# bob,4
+#
+# Output:
+# alice,5        |
+# bob,3          | bob,4
+# carol,9        |
+
+# Regular diff can almost do this, but if the diff skips over a bunch of lines
+# in the reference, it wfails to find the next match and just assumes that every
+# line is different after that point. (git diff might be smarter, idk)
+#
+
+# UPDATE
+ruby -rcolorize -e 'lines1 = File.readlines("./all_error_counts.log").map(&:strip); lines2 = File.readlines("./over_delta_error_counts.log").map(&:strip); lines1.each {|line| key = line.split(/,/).first.strip; match = lines2.detect {|l| w=l.split(/,/).first.strip; w == key }; puts "%60s | %s" % [line, match]}'
+
+# Working example:
+#
+# WITH errors AS (
+#     SELECT
+#         field_name,
+#         COUNT(*) as count
+#     FROM
+#         f_cs_performance_detail_migration_check
+#     GROUP BY 1)
+# SELECT
+#     errors.field_name AS field_name,
+#     errors.count AS count,
+#     c.numeric_scale,
+#     c.numeric_precision,
+#     (1.0/POW(10, c.numeric_scale))::VARCHAR(50) AS delta
+# FROM
+#     errors
+#     LEFT JOIN information_schema.columns AS c ON LOWER(errors.field_name)=LOWER(c.column_name)
+# WHERE
+#     c.table_name = 'F_CS_PERFORMANCE_DETAIL'
+# ORDER BY errors.field_name
+#
