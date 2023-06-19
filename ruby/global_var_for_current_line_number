@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "When processing an input file, \$. contains the current line number of the file."
+echo 'From the command line, use "$.", which is 1-based.'
+echo 'From inside a dedicated script, use ARGF.each_line.with_index, which is 0-based.'
+echo
+echo 'Try it yourself:'
+echo
+echo "# Poor man's cat -n"
+echo "cat '$0' | ruby -ne 'puts \"%6d: %s\" % [\$.,\$_]'"
