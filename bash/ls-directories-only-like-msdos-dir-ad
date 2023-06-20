@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "Hey, remember DIR /AD ? You can sorta do the same thing with ls -d */"
