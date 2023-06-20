@@ -1,0 +1,17 @@
+#!/bin/bash
+
+
+cat <<- EOF
+You can cat a file in another branch with git show <branch>:<path>
+Paths may be relative to the current folder.
+git show origin/feature/snowflake-moveover:./data_science/f_data_robot_scores.py
+
+Doingit with a submodule is a bit trickier. You need the desired submodule
+commit and you need to be in the submodule folder. But both of these are easily
+obtainable. Let's pull the config for Snowflake. Assuming I'm in the warehouse
+folder (where I live all day)
+
+COMMIT=git submodule status | grep finance | awk '{ print $1 }'
+(cd finance && git show $COMMIT:config/etl_nightly_config.json)
+
+EOF
