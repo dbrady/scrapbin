@@ -2,6 +2,13 @@
 
 
 cat <<- EOF
+
+TL;dr idk. Last line of this text block sums it up well.
+
+(Longer: This is trickier than it looks. Committing this file to
+capture the discussion for Future Me to see where my thought process
+was headed so I know what I missed.)
+
 You can cat a file in another branch with git show <branch>:<path>
 Paths may be relative to the current folder.
 git show origin/feature/snowflake-moveover:./data_science/f_data_robot_scores.py
@@ -13,5 +20,11 @@ folder (where I live all day)
 
 COMMIT=git submodule status | grep finance | awk '{ print $1 }'
 (cd finance && git show $COMMIT:config/etl_nightly_config.json)
+
+Wait, no. Che commit returned there is the submodule status for the current
+branch. We need the submodule commit from the other branch, and THEN to dive in
+and show the file.
+
+Okay wait I don't actually know how to do this
 
 EOF
