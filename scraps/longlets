@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+# How long are our longest let lines?
+require "colorize"
+
+LineInfo = Struct.new(:file, :line_number, :line) do
+  def to_s
+    location = "#{file}:#{line_number}".green
+    "#{line.size.to_s.rjust(3)}: #{location} #{line.rstrip}"
+  end
+end
+
+count = 0
+longest_lets_ever = Dir.glob("spec/**/*_spec.rb").map do |file|
+  longest_let_line = File.readlines(file).find_all {|line| line =~ /^\s*let\(:/}.map.with_index do |line, index|
+    LineInfo.new(file, index+1, line)
+  end.max_by {|info| info.line.size }
+
+  longest_let_line
+end.compact
+
+longest_lets = longest_lets_ever.sort_by {|info| info.line.size }.reverse.first(5)
+
+puts longest_lets
+
+puts "Total lets: #{longest_lets_ever.size}"
+puts "Lets over 120: #{longest_lets_ever.find_all { |let| let.line.size >= 120 }.size}"
