@@ -12,4 +12,7 @@ echo "Grouping partial match: put ) after initials: cat names.txt | sed -E 's%(^
 echo
 echo "IMPORTANT: linux sed != unix sed. Check manpage for subtleties, like no first~step in Unix."
 echo
+echo "NOTE: -i and -I take an extension argument for making backups. If you don't want fs litter, pass an"
+echo "empty string arg, e.g. -i '' or -I ''."
+echo
 echo "See Also: https://www.gnu.org/software/sed/manual/html_node/advanced-sed.html"
