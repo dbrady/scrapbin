@@ -4,7 +4,24 @@ require "colorize"
 require "optimist"
 String.disable_colorization unless $stdout.tty?
 
-opts = Optimist.options do
-  opt :debug, "Print extra debug info", default: false
+class Application
+  attr_reader :opts
+
+  def debug?
+    opts[:debug]
+  end
+
+  def run
+    @opts = Optimist.options do
+      opt :debug, "Print extra debug info", default: false
+    end
+
+    puts opts.inspect if opts[:debug]
+  end
+
 end
-puts opts.inspect if opts[:debug]
+
+
+if __FILE__ == $0
+  Application.new.run
+end
