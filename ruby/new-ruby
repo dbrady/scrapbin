@@ -1,22 +1,23 @@
 #!/usr/bin/env ruby
-# scriptname - new ruby skeleton from refdox. Updated 2023-06-12.
+# scriptname - HEY DAVE COME DESCRIBE THIS SCRIPT
 require "colorize"
 require "optimist"
+require_relative "dbrady_cli"
 String.disable_colorization unless $stdout.tty?
 
 class Application
-  attr_reader :opts
-
-  def debug?
-    opts[:debug]
-  end
+  include DbradyCli
 
   def run
     @opts = Optimist.options do
       opt :debug, "Print extra debug info", default: false
+      opt :pretend, "Print commands but do not run them", default: false
+      opt :quiet, "Run with minimal output", default: false
     end
-
+    end
     puts opts.inspect if opts[:debug]
+
+    # APP CODE GOES HERE
   end
 
 end
