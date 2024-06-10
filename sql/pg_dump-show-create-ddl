@@ -1,0 +1,6 @@
+#!/bin/bash
+# pg_dump-show-create-ddl
+
+echo 'pg_dump -s -t <table> <database>'
+
+pg_dump -s -t $@
