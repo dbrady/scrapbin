@@ -1,0 +1,18 @@
+#!/bin/bash
+# expand-path - how how to expand the path (also how to do s/// on a variable inline)
+
+TEST='~/bin'
+TEST2="#{TEST/#\~/$HOME}"
+
+echo "TEST=$TEST"
+echo
+
+echo "Clever Version, may not work:"
+echo 'TEST2="#{TEST/#\~/$HOME}"'
+echo "TEST2=$TEST2"
+echo
+
+echo "Stable version, but scary eval:"
+TEST3=$(eval echo "$TEST")
+echo 'TEST3=$(eval echo "$TEST")'
+echo "TEST3=$TEST3"
