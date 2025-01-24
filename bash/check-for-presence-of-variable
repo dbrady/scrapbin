@@ -1,6 +1,11 @@
 #!/bin/bash
 # tl;dr: if [ -z "$var" ]; then ... fi
 
+# set FILE to $1 if it is present, otherwise set to "default.txt"
+FILE=${1:-"default.txt"}
+echo 'Setting file to $1 if it is present, otherwise set to "default.txt"...'
+echo "FILE is: $FILE"
+
 # check if script was passed no args
 if [ $# -eq 0 ]; then
    echo 'if [ $# -eq 0 ] is true; no arguments given to this script'
