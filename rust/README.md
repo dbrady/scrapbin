@@ -17,10 +17,44 @@ Notes from setting up Rust on the Linux workstation (2026-11-13, Rust 1.100.0).
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ```
 
-This installs the stable toolchain: `cargo`, `rustc`, `rustfmt`, `clippy`,
-`rust-analyzer`, etc. It also appends `. "$HOME/.cargo/env"` to `~/.bashrc`,
+This installs the stable toolchain: `cargo`, `rustc`, `rustfmt`, `clippy` and
+offline docs. `rust-analyzer` (the editor language server for autocomplete and
+inline errors) is NOT in the default profile; add it with
+`rustup component add rust-analyzer`. The installer also appends `. "$HOME/.cargo/env"` to `~/.bashrc`,
 `~/.profile` and `~/.bash_profile` so cargo is on PATH. In an already-open
 shell, run `source ~/.cargo/env`.
+
+The C toolchain (`build-essential`) must be installed too; rustc uses `cc` as
+its linker.
+
+## Working on a project
+
+```bash
+cargo new myapp          # new project: Cargo.toml (like a Gemfile) + src/main.rs
+cargo run                # build (debug) and run
+cargo build --release    # optimized binary → target/release/myapp
+cargo add serde          # add a crate dependency (edits Cargo.toml)
+cargo clippy             # lint for common mistakes
+cargo fmt                # format the code
+cargo test               # run tests
+```
+
+Debug builds land in `target/debug/`, release builds in `target/release/`. The
+release binary is a single self-contained file: copy it to another Linux
+x86-64 machine and it runs without Rust installed there. `Cargo.lock` is like
+`Gemfile.lock`; commit it for binaries.
+
+## Learning / docs
+
+```bash
+rustup doc --book        # "The Rust Programming Language", offline
+rustup doc --std         # standard library API docs, offline
+cargo doc --open         # docs for your project AND all its dependencies
+```
+
+- The Book: https://doc.rust-lang.org/book/ (start here)
+- Rust by Example: https://doc.rust-lang.org/rust-by-example/
+- Crate docs: https://docs.rs (every crates.io crate's API docs)
 
 ## Updating
 
