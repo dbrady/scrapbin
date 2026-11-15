@@ -44,6 +44,30 @@ release binary is a single self-contained file: copy it to another Linux
 x86-64 machine and it runs without Rust installed there. `Cargo.lock` is like
 `Gemfile.lock`; commit it for binaries.
 
+## Editor support (rust-analyzer)
+
+rust-analyzer is the Rust language server: autocomplete, go-to-definition,
+inline type hints and errors as you type. Install it as a rustup component so
+it stays in sync with the compiler:
+
+```bash
+rustup component add rust-analyzer
+rust-analyzer --version  # → ~/.cargo/bin/rust-analyzer
+```
+
+`rustup update` keeps it current along with the rest of the toolchain. Point
+your editor's LSP client at it:
+
+- **VS Code**: install the "rust-analyzer" extension. It bundles its own copy
+  of the server by default; to use the rustup one instead, set
+  `"rust-analyzer.server.path"` to the absolute path from `which rust-analyzer`.
+- **Emacs**: eglot (built in) and lsp-mode both find `rust-analyzer` on PATH
+  automatically when you open a `.rs` file.
+- **Neovim**: `vim.lsp.enable('rust_analyzer')` with nvim-lspconfig installed.
+
+It works on the project containing the open file (the nearest `Cargo.toml`), so
+open files from inside a cargo project, not loose `.rs` files.
+
 ## Learning / docs
 
 ```bash
